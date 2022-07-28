@@ -96,8 +96,8 @@ public final class Constants {
     public static final double MK4_L2_ROTATION_REDUCTION = (15.0 / 32.0) * (10.0 / 60.0);
     public static final double MK4_L2_WHEEL_DIAMETER = 0.10033; // Meters
 
-    public static final double GEAR_RATIO_SERIALIZER_LEFT = 5.0 / 1.0; // Overdriven, 2020 bot
-    public static final double GEAR_RATIO_SERIALIZER_RIGHT = 5.0 / 1.0; // Overdriven, 2020 bot
+    public static final double GEAR_RATIO_FEEDER_TOP = 5.0 / 1.0; //FIXME
+    public static final double GEAR_RATIO_FEEDER_BOTTOM = 5.0 / 1.0; //FIX ME
     public static final double GEAR_RATIO_INTAKE_ROLLERS = 2.0 / 1.0; // Overdriven, 2020 bot
     public static final double GEAR_RATIO_CONVEYOR_BOTTOM = 4.0 / 1.0; // Overdriven, 2020 bot
     public static final double GEAR_RATIO_CONVEYOR_TOP = 4.0 / 1.0; // Overdriven, 2020 bot
@@ -132,5 +132,14 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER = 1;
     public static final double TRIGGER_THRESHOLD = 0.1;
     public static final double JOYSTICK_THRESHOLD = 0.1;
+
+    public static final double LL_TARGET_HEIGHT  = 101.625 +1.2;
+    public static final double LL_MOUNT_ANGLE = 40.0;
+    public static final double LL_MOUNT_HEIGHT = 42.9;
+    public static final double LL_POSE_TOLERANCE = 3.5; //meters
+    public static final double LL_LATENCY = 0.02; //seconds
+    
+    public static final int HOOD_MAX_LIMIT = 22;
+    public static final int HOOD_MIN_LIMIT = 0;
 
 }
