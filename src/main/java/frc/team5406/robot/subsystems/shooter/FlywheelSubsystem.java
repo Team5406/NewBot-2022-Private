@@ -36,6 +36,26 @@ public class FlywheelSubsystem extends SubsystemBase {
         shooterEncoder.setPosition(0);
     }
 
+    public void setShooterSpeed(double RPM) {
+        //RPM*=0.98;
+          if (RPM == 0) {
+            stopShooter();
+    
+        } else {
+        //  double arbFF = shooterFF.calculate(RPM/Constants.SECONDS_PER_MINUTE);
+          shooterPID.setReference(RPM *  Constants.GEAR_RATIO_SHOOTER, ControlType.kVelocity, 1);
+        }
+    
+      }
+
+    public void stopShooter(){
+        shooter.set(0);
+    }
+
+    public double getShooterSpeed() {
+        return shooterEncoder.getVelocity() * 1 / Constants.GEAR_RATIO_SHOOTER;
+    }
+
     public FlywheelSubsystem(){
         setupMotors();
     }
