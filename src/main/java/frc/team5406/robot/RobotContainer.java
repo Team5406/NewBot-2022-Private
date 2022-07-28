@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.commands.DefaultDriveCommand;
+import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.subsystems.*;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
@@ -17,6 +19,8 @@ import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
 import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
 import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
 import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
+import frc.team5406.robot.triggers.JoystickMoved;
+import frc.team5406.robot.triggers.TriggerPressed;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +40,12 @@ public class RobotContainer {
   // The driver's controller
   XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
   XboxController driverGamepad = new XboxController(Constants.DRIVER_CONTROLLER);
+
+  Trigger driverLeftTrigger = new TriggerPressed(driverGamepad::getLeftTriggerAxis);
+  Trigger driverRightTrigger = new TriggerPressed(driverGamepad::getRightTriggerAxis);
+  Trigger operatorLeftTrigger = new TriggerPressed(operatorGamepad::getLeftTriggerAxis);
+  Trigger operatorRightTrigger = new TriggerPressed(operatorGamepad::getRightTriggerAxis);
+  Trigger operatorJoystickRight = new JoystickMoved(operatorGamepad::getRightY);
 
   JoystickButton operatorLeftBumper = new JoystickButton(operatorGamepad, Button.kLeftBumper.value);
   JoystickButton operatorRightModifier = new JoystickButton(operatorGamepad, Button.kStart.value);
@@ -67,7 +77,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    driverRightTrigger.whileActiveContinuous(
+      new IntakeCommand(m_intake, m_feeder)
+    );
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -78,7 +92,7 @@ public class RobotContainer {
     return null; //fix once we get autos
   }
 
-  private static double deadband(double value, double deadband) {
+  private double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {
       if (value > 0.0) {
         return (value - deadband) / (1.0 - deadband);
@@ -90,7 +104,7 @@ public class RobotContainer {
     }
   }
 
-  private static double modifyAxis(double value) {
+  private double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.05);
 
