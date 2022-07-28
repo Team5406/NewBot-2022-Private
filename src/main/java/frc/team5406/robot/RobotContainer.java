@@ -6,7 +6,17 @@ package frc.team5406.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.team5406.robot.commands.DefaultDriveCommand;
+import frc.team5406.robot.subsystems.*;
+import frc.team5406.robot.subsystems.drive.DriveSubsystem;
+import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
+import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
+import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
+import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
+import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,12 +26,39 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  DriveSubsystem m_swerve = new DriveSubsystem();
+  FeederSubsystem m_feeder = new FeederSubsystem();
+  IntakeSubsystem m_intake = new IntakeSubsystem();
+  BoosterSubsystem m_booster = new BoosterSubsystem();
+  FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
+  HoodSubsystem m_hood = new HoodSubsystem();
 
+  // The driver's controller
+  XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
+  XboxController driverGamepad = new XboxController(Constants.DRIVER_CONTROLLER);
+
+  JoystickButton operatorLeftBumper = new JoystickButton(operatorGamepad, Button.kLeftBumper.value);
+  JoystickButton operatorRightModifier = new JoystickButton(operatorGamepad, Button.kStart.value);
+  JoystickButton operatorLeftModifier = new JoystickButton(operatorGamepad, Button.kBack.value);
+  JoystickButton operatorRightBumper = new JoystickButton(operatorGamepad, Button.kRightBumper.value);
+  JoystickButton operatorYButton = new JoystickButton(operatorGamepad, Button.kY.value);
+  JoystickButton operatorAButton = new JoystickButton(operatorGamepad, Button.kA.value);
+  JoystickButton operatorBButton = new JoystickButton(operatorGamepad, Button.kB.value);
+  JoystickButton operatorXButton = new JoystickButton(operatorGamepad, Button.kX.value);
+  JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
+  JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    m_swerve.setDefaultCommand(new DefaultDriveCommand(
+            m_swerve,
+            () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_ANGULAR_SPEED
+    ));
   }
 
   /**
@@ -39,5 +76,27 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return null; //fix once we get autos
+  }
+
+  private static double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
+
+  private static double modifyAxis(double value) {
+    // Deadband
+    value = deadband(value, 0.05);
+
+    // Square the axis
+    value = Math.copySign(value * value, value);
+
+    return value;
   }
 }
