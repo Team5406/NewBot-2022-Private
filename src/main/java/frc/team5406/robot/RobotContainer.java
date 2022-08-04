@@ -11,14 +11,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.commands.DefaultDriveCommand;
-import frc.team5406.robot.commands.IntakeCommand;
-import frc.team5406.robot.subsystems.*;
+//import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
-import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
+/*import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
 import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
 import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
 import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
-import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
+import frc.team5406.robot.subsystems.shooter.HoodSubsystem;*/
 import frc.team5406.robot.triggers.JoystickMoved;
 import frc.team5406.robot.triggers.TriggerPressed;
 
@@ -31,11 +30,11 @@ import frc.team5406.robot.triggers.TriggerPressed;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   DriveSubsystem m_swerve = new DriveSubsystem();
-  FeederSubsystem m_feeder = new FeederSubsystem();
+  /*FeederSubsystem m_feeder = new FeederSubsystem();
   IntakeSubsystem m_intake = new IntakeSubsystem();
   BoosterSubsystem m_booster = new BoosterSubsystem();
   FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
-  HoodSubsystem m_hood = new HoodSubsystem();
+  HoodSubsystem m_hood = new HoodSubsystem();*/
 
   // The driver's controller
   XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -65,9 +64,9 @@ public class RobotContainer {
 
     m_swerve.setDefaultCommand(new DefaultDriveCommand(
             m_swerve,
-            () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
-            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
-            () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_ANGULAR_SPEED
+            () -> -modifyAxis(driverGamepad.getRightY()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_ANGULAR_SPEED
     ));
   }
 
@@ -78,9 +77,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverRightTrigger.whileActiveContinuous(
+    /*driverRightTrigger.whileActiveContinuous(
       new IntakeCommand(m_intake, m_feeder)
-    );
+    );*/
   }
 
   /**

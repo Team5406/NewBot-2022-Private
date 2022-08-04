@@ -30,8 +30,12 @@ public class SwerveModule {
 
   private CANCoder rotateAbsSensor;
 
-  private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV); //Values from random GitHub Repo - Probably should fix this.
-  private final SimpleMotorFeedforward rotationFF = new SimpleMotorFeedforward(Constants.ROTATION_KS, Constants.ROTATION_KV); 
+  private double resetIteration = 0;
+
+
+
+  private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV, Constants.DRIVE_KA);
+  private final SimpleMotorFeedforward rotationFF = new SimpleMotorFeedforward(Constants.ROTATION_KS, Constants.ROTATION_KV, Constants.ROTATION_KA); 
 
   /**
    * Creates a new SwerveModule object
@@ -53,9 +57,10 @@ public class SwerveModule {
     driveMotor.restoreFactoryDefaults();
 
     driveMotor.setIdleMode(IdleMode.kCoast);
-    driveMotor.setInverted(Constants.DIRVE_MOTOR_INVERSION);
+    driveMotor.setInverted(Constants.DRIVE_MOTOR_INVERSION);
     driveMotor.enableVoltageCompensation(Constants.MAXIMUM_VOLTAGE);
     driveMotor.setSmartCurrentLimit(Constants.CURRENT_LIMIT_DRIVE_MOTOR);
+    driveMotor.setClosedLoopRampRate(0.05);
 
     drivePIDController.setP(Constants.DRIVE_PID0_P, 0);
     drivePIDController.setI(Constants.DRIVE_PID0_I, 0);
@@ -87,9 +92,13 @@ public class SwerveModule {
     rotationPIDController.setSmartMotionMaxVelocity(Constants.ROTATION_PID0_MAX_VELOCITY, 0);
 
     rotateAbsSensor = new CANCoder(canCoderID);
-    rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+    rotateAbsSensor.configSensorDirection(false);
 
-   resetEncoders();
+    rotationRelEncoder.setPositionConversionFactor(2.0 * Math.PI * Constants.MK4_L2_ROTATION_REDUCTION);
+    rotationRelEncoder.setVelocityConversionFactor(2.0 * Math.PI * Constants.MK4_L2_ROTATION_REDUCTION / 60.0);
+
+    resetEncoders();
 
   }
 
@@ -99,7 +108,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(getDriveSpeed(), new Rotation2d(rotationRelEncoder.getPosition()));
+    return new SwerveModuleState(getDriveSpeed(), new Rotation2d(Units.rotationsToRadians(rotationRelEncoder.getPosition())));
   }
 
   /**
@@ -109,40 +118,96 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState,
-        new Rotation2d(rotationRelEncoder.getPosition()));
+    double cappedAngle = rotationRelEncoder.getPosition();
+    if (cappedAngle > Math.PI) {
+      cappedAngle -= 2.0 * Math.PI;
+  } else if (cappedAngle < -Math.PI) {
+      cappedAngle += 2.0 * Math.PI;
+  }
+  SmartDashboard.putNumber("Steer Desired Angle" + rotationMotor.getDeviceId(), desiredState.angle.getRadians());
 
-    double rotationArbFF = rotationFF.calculate(
-        (rotationRelEncoder.getVelocity() * Constants.MK4_L2_ROTATION_REDUCTION) / Constants.SECONDS_PER_MINUTE);
+
+
+
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState,
+        new Rotation2d(cappedAngle));
+
+        SmartDashboard.putNumber("Steer Opt Angle" + rotationMotor.getDeviceId(), state.angle.getRadians());
+
+    /*double rotationArbFF = rotationFF.calculate(
+        ( rotationRelEncoder.getVelocity() * Constants.MK4_L2_ROTATION_REDUCTION) / Constants.SECONDS_PER_MINUTE);*/
     double driveArbFF = driveFF.calculate(state.speedMetersPerSecond);
     
 
-    drivePIDController.setReference(state.speedMetersPerSecond * Constants.MK4_L2_DRIVE_REDUCTION,
-        ControlType.kVelocity, 0, driveArbFF, SparkMaxPIDController.ArbFFUnits.kVoltage);
-    rotationPIDController.setReference(
-        Units.radiansToRotations(state.angle.getRadians()) * Constants.MK4_L2_ROTATION_REDUCTION,
-        ControlType.kSmartMotion, 0, rotationArbFF, SparkMaxPIDController.ArbFFUnits.kVoltage);
+    drivePIDController.setReference(state.speedMetersPerSecond * Constants.MK4_L2_DRIVE_REDUCTION, 
+     ControlType.kVelocity, 0, driveArbFF, SparkMaxPIDController.ArbFFUnits.kVoltage);
+        setReferenceAngle(state.angle.getRadians());
   }
 
+  public void setReferenceAngle(double referenceAngleRadians) {
+    double currentAngleRadians =rotationRelEncoder.getPosition();
+
+    // Reset the NEO's encoder periodically when the module is not rotating.
+    // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
+    // end up getting a good reading. If we reset periodically this won't matter anymore.
+    if (rotationRelEncoder.getVelocity() < Constants.ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
+        if (++resetIteration >= Constants.ENCODER_RESET_ITERATIONS) {
+            resetIteration = 0;
+            double absoluteAngle = getAbsoluteAngle();
+            rotationRelEncoder.setPosition(absoluteAngle);
+            currentAngleRadians = absoluteAngle;
+        }
+    } else {
+        resetIteration = 0;
+    }
+
+    double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
+    if (currentAngleRadiansMod < 0.0) {
+        currentAngleRadiansMod += 2.0 * Math.PI;
+    }
+
+    // The reference angle has the range [0, 2pi) but the Neo's encoder can go above that
+    double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
+    if (referenceAngleRadians - currentAngleRadiansMod > Math.PI) {
+        adjustedReferenceAngleRadians -= 2.0 * Math.PI;
+    } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
+        adjustedReferenceAngleRadians += 2.0 * Math.PI;
+    }
+
+    SmartDashboard.putNumber("Steer Target" + rotationMotor.getDeviceId(), adjustedReferenceAngleRadians);
+    rotationPIDController.setReference(adjustedReferenceAngleRadians, CANSparkMax.ControlType.kPosition, 0);
+}
+/*
   public double getRotateAngleFromAbs(double absPos) {
     if (absPos > 180) {
       absPos -= 360;
     }
     return absPos / Constants.MK4_L2_ROTATION_REDUCTION;
-  }
+  }*/
 
-  public double getAbsRotatePosition() {
+
+  public double getAbsoluteAngle() {
+    double angle = Math.toRadians(rotateAbsSensor.getAbsolutePosition());
+    angle %= 2.0 * Math.PI;
+    if (angle < 0.0) {
+        angle += 2.0 * Math.PI;
+    }
+
+    return angle;
+}
+
+  /*public double getAbsRotatePosition() {
     return getRotateAngleFromAbs(rotateAbsSensor.getAbsolutePosition());
-  }
+  }*/
 
   public void resetEncoders(){
     driveRelEncoder.setPosition(0);
-    rotationRelEncoder.setPosition((getAbsRotatePosition() * Constants.MK4_L2_ROTATION_REDUCTION) / 360);
+    rotationRelEncoder.setPosition(getAbsoluteAngle());
   }
 
   public double getDriveSpeed() {
-    return Units.inchesToMeters(((driveRelEncoder.getVelocity() / Constants.MK4_L2_DRIVE_REDUCTION) * Math.PI * Constants.MK4_L2_WHEEL_DIAMETER)
-        / Constants.SECONDS_PER_MINUTE);
+    return driveRelEncoder.getVelocity() * Constants.MK4_L2_DRIVE_REDUCTION * Math.PI * Constants.MK4_L2_WHEEL_DIAMETER
+        / Constants.SECONDS_PER_MINUTE;
   }
 
 }
