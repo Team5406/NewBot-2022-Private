@@ -73,6 +73,11 @@ public class DriveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
     }
 
+    public void zeroGyroscope() {
+        
+        m_navx.zeroYaw();
+    }
+
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
         m_odometry.update(

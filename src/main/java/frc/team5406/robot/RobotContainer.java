@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.commands.DefaultDriveCommand;
@@ -49,6 +50,10 @@ public class RobotContainer {
   JoystickButton operatorLeftBumper = new JoystickButton(operatorGamepad, Button.kLeftBumper.value);
   JoystickButton operatorRightModifier = new JoystickButton(operatorGamepad, Button.kStart.value);
   JoystickButton operatorLeftModifier = new JoystickButton(operatorGamepad, Button.kBack.value);
+  JoystickButton driverRightModifier = new JoystickButton(driverGamepad, Button.kStart.value);
+  JoystickButton driverLeftModifier = new JoystickButton(driverGamepad, Button.kBack.value);
+  JoystickButton driverRightJoystickButton = new JoystickButton(driverGamepad, Button.kRightStick.value);
+  JoystickButton driverLeftJoystickButton = new JoystickButton(driverGamepad, Button.kLeftStick.value);
   JoystickButton operatorRightBumper = new JoystickButton(operatorGamepad, Button.kRightBumper.value);
   JoystickButton operatorYButton = new JoystickButton(operatorGamepad, Button.kY.value);
   JoystickButton operatorAButton = new JoystickButton(operatorGamepad, Button.kA.value);
@@ -61,12 +66,13 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
+    
     m_swerve.setDefaultCommand(new DefaultDriveCommand(
             m_swerve,
             () -> -modifyAxis(driverGamepad.getRightY()) * Constants.K_MAX_SPEED,
             () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_SPEED,
-            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_ANGULAR_SPEED
+            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_ANGULAR_SPEED,
+            () -> driverGamepad.getRightStickButton()
     ));
   }
 
@@ -80,6 +86,10 @@ public class RobotContainer {
     /*driverRightTrigger.whileActiveContinuous(
       new IntakeCommand(m_intake, m_feeder)
     );*/
+
+    driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
+
+  
   }
 
   /**
