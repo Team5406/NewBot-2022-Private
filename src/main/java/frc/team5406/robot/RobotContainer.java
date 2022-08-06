@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.commands.DefaultDriveCommand;
+import frc.team5406.robot.commands.SetShooter;
+import frc.team5406.robot.commands.Shoot;
+import frc.team5406.robot.subsystems.LimelightSubsystem;
 //import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 /*import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
@@ -35,7 +38,8 @@ public class RobotContainer {
   IntakeSubsystem m_intake = new IntakeSubsystem();
   BoosterSubsystem m_booster = new BoosterSubsystem();
   FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
-  HoodSubsystem m_hood = new HoodSubsystem();*/
+  HoodSubsystem m_hood = new HoodSubsystem();
+  LimelightSubsystem m_limelight = new LimelightSubsystem();*/
 
   // The driver's controller
   XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -58,7 +62,7 @@ public class RobotContainer {
   JoystickButton operatorYButton = new JoystickButton(operatorGamepad, Button.kY.value);
   JoystickButton operatorAButton = new JoystickButton(operatorGamepad, Button.kA.value);
   JoystickButton operatorBButton = new JoystickButton(operatorGamepad, Button.kB.value);
-  JoystickButton operatorXButton = new JoystickButton(operatorGamepad, Button.kX.value);
+  JoystickButton driverXButton = new JoystickButton(operatorGamepad, Button.kX.value);
   JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
   JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
@@ -85,10 +89,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /*driverRightTrigger.whileActiveContinuous(
       new IntakeCommand(m_intake, m_feeder)
+    );
+       driverLeftTrigger.whileActiveContinuous(
+      new SetShooter(m_flywheel, m_hood, m_limelight)
+    );
+
+    driverXButton.whileActiveContinuous(
+      new Shoot(m_booster, m_feeder)
     );*/
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
-
   
   }
 
