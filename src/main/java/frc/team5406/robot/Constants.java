@@ -155,4 +155,19 @@ public final class Constants {
     public static final int FLYWHEEL_SPEED_FENDER_HIGH = 2250;
     public static final double HOOD_ANGLE_FENDER_HIGH = 1.5;
 
+    public static final boolean GYRO_REVERSED = true;
+
+    
+    public static final double MAX_SPEED_METERS_PER_SECOND = 2.5;
+    public static final double MAX_ACTUAL_SPEED_METERS_PER_SECOND = 4;
+    public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+
+    
+    public static final double S_VOLTS = 0.209;
+    public static final double V_VOLTS = 2.5;
+    public static final double A_VOLTS = 0.55;
+
+    public static final double RAMSETE_B = 2;
+    public static final double RAMSETE_ZETA = 0.7;
+    
 }

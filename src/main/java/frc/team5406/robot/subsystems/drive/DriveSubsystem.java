@@ -2,6 +2,7 @@ package frc.team5406.robot.subsystems.drive;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -12,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5406.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
-
-
 
     private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
     private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
@@ -31,7 +30,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final AHRS m_navx = new AHRS(Port.kMXP, (byte) 200); // NavX connected over MXP
 
-    private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
             m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
     private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, m_navx.getRotation2d());
@@ -74,9 +73,32 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void zeroGyroscope() {
-        
+
         m_navx.zeroYaw();
     }
+
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(m_navx.getAngle() * (Constants.GYRO_REVERSED ? -1.0 : 1.0));
+    }
+
+    public void reset() {
+        zeroGyroscope();
+        m_odometry.resetPosition(new Pose2d(), getHeading());
+    }
+
+    public void outputSpeeds(double leftSpeed, double rightSpeed, double rot) {
+        var swerveModuleStates = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(leftSpeed, rightSpeed, rot));
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.K_MAX_SPEED);
+        m_frontLeft.setDesiredState(swerveModuleStates[0]);
+        m_frontRight.setDesiredState(swerveModuleStates[1]);
+        m_backLeft.setDesiredState(swerveModuleStates[2]);
+        m_backRight.setDesiredState(swerveModuleStates[3]);
+    }
+
 
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
