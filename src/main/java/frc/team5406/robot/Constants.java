@@ -149,4 +149,10 @@ public final class Constants {
     public static final int HOOD_MAX_LIMIT = 22;
     public static final int HOOD_MIN_LIMIT = 0;
 
+    public static final int FEEDER_SPEED_TOP = 1000;
+    public static final int SHOOTER_MAX_SPEED = 4000; //RPM
+    
+    public static final int FLYWHEEL_SPEED_FENDER_HIGH = 2250;
+    public static final double HOOD_ANGLE_FENDER_HIGH = 1.5;
+
 }
