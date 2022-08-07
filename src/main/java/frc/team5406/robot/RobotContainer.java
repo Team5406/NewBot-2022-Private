@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.team5406.robot.autos.DriveStraight;
 import frc.team5406.robot.commands.DefaultDriveCommand;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
@@ -66,6 +67,8 @@ public class RobotContainer {
   JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
   JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
+  DriveStraight driveStraight = new DriveStraight(m_swerve);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -108,7 +111,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null; //fix once we get autos
+    return driveStraight.getAutonomousCommand();
   }
 
   private double deadband(double value, double deadband) {

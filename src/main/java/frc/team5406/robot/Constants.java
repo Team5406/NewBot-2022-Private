@@ -4,6 +4,7 @@
 
 package frc.team5406.robot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -162,6 +163,9 @@ public final class Constants {
     public static final double MAX_ACTUAL_SPEED_METERS_PER_SECOND = 4;
     public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
 
+    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
     
     public static final double S_VOLTS = 0.209;
     public static final double V_VOLTS = 2.5;
@@ -169,5 +173,13 @@ public final class Constants {
 
     public static final double RAMSETE_B = 2;
     public static final double RAMSETE_ZETA = 0.7;
+
+    public static final double kPXController = 1;
+    public static final double kPYController = 1;
+    public static final double kPThetaController = 1;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+    new TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5406.robot.Constants;
@@ -90,15 +91,19 @@ public class DriveSubsystem extends SubsystemBase {
         m_odometry.resetPosition(new Pose2d(), getHeading());
     }
 
-    public void outputSpeeds(double leftSpeed, double rightSpeed, double rot) {
-        var swerveModuleStates = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(leftSpeed, rightSpeed, rot));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.K_MAX_SPEED);
-        m_frontLeft.setDesiredState(swerveModuleStates[0]);
-        m_frontRight.setDesiredState(swerveModuleStates[1]);
-        m_backLeft.setDesiredState(swerveModuleStates[2]);
-        m_backRight.setDesiredState(swerveModuleStates[3]);
+    public void setPosition(Pose2d pose){
+        zeroGyroscope();
+        m_odometry.resetPosition(pose, getHeading());
     }
 
+    //Used for Autos.
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.K_MAX_SPEED);
+        m_frontLeft.setDesiredState(desiredStates[0]);
+        m_frontRight.setDesiredState(desiredStates[1]);
+        m_backLeft.setDesiredState(desiredStates[2]);
+        m_backRight.setDesiredState(desiredStates[3]);
+    }
 
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
