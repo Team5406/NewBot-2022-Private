@@ -76,10 +76,10 @@ public class RobotContainer {
     
     m_swerve.setDefaultCommand(new DefaultDriveCommand(
             m_swerve,
-            () -> -modifyAxis(driverGamepad.getRightY()) * Constants.K_MAX_SPEED,
-            () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_SPEED,
-            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_ANGULAR_SPEED,
-            () -> driverGamepad.getRightStickButton()
+            () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_ANGULAR_SPEED,
+            () -> driverGamepad.getRightBumper()
     ));
   }
 
@@ -100,6 +100,7 @@ public class RobotContainer {
     driverXButton.whileActiveContinuous(
       new Shoot(m_booster, m_feeder)
     );*/
+
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
   
