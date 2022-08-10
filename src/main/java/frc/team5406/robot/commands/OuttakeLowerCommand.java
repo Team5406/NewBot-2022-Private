@@ -7,12 +7,12 @@ import frc.team5406.robot.Constants;
 import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
 import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
 
-public class IntakeCommand extends CommandBase {
+public class OuttakeLowerCommand extends CommandBase {
     IntakeSubsystem intake;
     FeederSubsystem feeder;
     DoubleSupplier analog;
 
-    public IntakeCommand(IntakeSubsystem _intake, FeederSubsystem _feeder) {
+    public OuttakeLowerCommand(IntakeSubsystem _intake, FeederSubsystem _feeder) {
         intake = _intake;
         feeder = _feeder;
         addRequirements(intake, feeder);
@@ -29,10 +29,10 @@ public class IntakeCommand extends CommandBase {
     public void execute() {
         intake.intakeExtend();
         //feeder.setConveyorBottomSpeed(analog.getAsDouble() > 0.1 ? analog.getAsDouble() : 1000); // FIXME
-        feeder.setConveyorBottomSpeed(Constants.CONVEYOR_INTAKE_SPEED_BOTTOM);
-        feeder.setConveyorTopSpeed(Constants.CONVEYOR_INTAKE_SPEED_TOP);
+        feeder.setConveyorBottomSpeed(Constants.CONVEYOR_OUTTAKE_SPEED_BOTTOM);
+        feeder.setConveyorTopSpeed(Constants.CONVEYOR_OUTTAKE_SPEED_TOP);
         feeder.backGateExtend();
-        feeder.frontGateRetract();
+        feeder.frontGateExtend();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Intake - End");
+        System.out.println("Outtake - End");
         intake.intakeRetract();
         feeder.stopConveyorBottom();
         feeder.stopConveyorTop();

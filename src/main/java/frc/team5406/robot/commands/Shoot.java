@@ -20,13 +20,13 @@ public class Shoot extends CommandBase {
     public void execute() {
         double boosterSpeed = SmartDashboard.getNumber("Booster Target RPM", 1000);
         booster.setBoosterSpeed(boosterSpeed);
-        feeder.setFeederTopSpeed(Constants.FEEDER_SPEED_TOP);
+        feeder.setConveyorTopSpeed(Constants.CONVEYOR_INTAKE_SPEED_TOP);
     }
 
     @Override
     public void end(boolean interrupted) {
         booster.stopBooster();
-        feeder.stopFeederTop();
+        feeder.stopConveyorTop();
     }
 
 }
