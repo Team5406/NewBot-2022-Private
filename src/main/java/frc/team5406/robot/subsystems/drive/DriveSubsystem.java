@@ -9,16 +9,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5406.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
 
-    private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-    private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-    private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-    private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+    private final Translation2d m_frontLeftLocation = new Translation2d(0.22, 0.22);
+    private final Translation2d m_frontRightLocation = new Translation2d(0.22, -0.22);
+    private final Translation2d m_backLeftLocation = new Translation2d(-0.22, 0.22);
+    private final Translation2d m_backRightLocation = new Translation2d(-0.22, -0.22);
 
     private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
             Constants.FRONT_LEFT_MODULE_STEER_MOTOR, Constants.FRONT_LEFT_MODULE_STEER_ENCODER);
@@ -74,7 +76,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void zeroGyroscope() {
-
         m_navx.zeroYaw();
     }
 
@@ -114,5 +115,10 @@ public class DriveSubsystem extends SubsystemBase {
                 m_backLeft.getState(),
                 m_backRight.getState());
     }
-
+    @Override
+    public void periodic() {
+        updateOdometry();
+        SmartDashboard.putNumber("Distance Travelled X", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Distance Travelled Y", m_odometry.getPoseMeters().getY());
+    }
 }

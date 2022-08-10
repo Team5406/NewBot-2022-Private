@@ -69,6 +69,9 @@ public class SwerveModule {
     drivePIDController.setFF(Constants.DRIVE_PID0_F, 0);
     drivePIDController.setOutputRange(Constants.OUTPUT_RANGE_MIN, Constants.OUTPUT_RANGE_MAX, 0);
 
+    driveRelEncoder.setPositionConversionFactor(Constants.MK4_L2_DRIVE_REDUCTION * Math.PI * Constants.MK4_L2_WHEEL_DIAMETER);
+    driveRelEncoder.setVelocityConversionFactor((Constants.MK4_L2_DRIVE_REDUCTION * Math.PI * Constants.MK4_L2_WHEEL_DIAMETER)/60);
+
 
     // Rotation Motor:
     rotationMotor = new CANSparkMax(rotationMotorID, MotorType.kBrushless);
@@ -108,7 +111,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(getDriveSpeed(), new Rotation2d(Units.rotationsToRadians(rotationRelEncoder.getPosition())));
+    return new SwerveModuleState(getDriveSpeed(), new Rotation2d(rotationRelEncoder.getPosition()));
   }
 
   /**
@@ -206,8 +209,7 @@ public class SwerveModule {
   }
 
   public double getDriveSpeed() {
-    return driveRelEncoder.getVelocity() * Constants.MK4_L2_DRIVE_REDUCTION * Math.PI * Constants.MK4_L2_WHEEL_DIAMETER
-        / Constants.SECONDS_PER_MINUTE;
+    return driveRelEncoder.getVelocity();
   }
 
 }
