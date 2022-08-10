@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -34,25 +35,26 @@ public class DriveStraight {
     }
 
     public Command getAutonomousCommand() {
-        drive.zeroGyroscope();
-        drive.reset();
+
+         drive.reset();
+        /*
         var autoVoltageConstraint = new SwerveDriveKinematicsConstraint(drive.m_kinematics,
-                Constants.MAX_SPEED_METERS_PER_SECOND);
+                Constants.MAX_SPEED_METERS_PER_SECOND);*/
 
         TrajectoryConfig config = new TrajectoryConfig(Constants.MAX_SPEED_METERS_PER_SECOND,
                 Constants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
-                .setKinematics(drive.m_kinematics)
-                .addConstraint(autoVoltageConstraint);
+                .setKinematics(drive.m_kinematics);
+              //  .addConstraint(autoVoltageConstraint);
         config.setReversed(false);
 
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(0)),
+                new Pose2d(0, 0, new Rotation2d(Units.radiansToDegrees(-90))),
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
 
                 ),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(1.5, 0, new Rotation2d(0)),
+                new Pose2d(0, 2, new Rotation2d(Units.radiansToDegrees(-90))),
                 config);
 
         var thetaController = new ProfiledPIDController(
