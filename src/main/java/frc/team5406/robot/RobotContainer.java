@@ -16,11 +16,12 @@ import frc.team5406.robot.commands.DefaultDriveCommand;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
-//import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.OuttakeLowerCommand;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
-/*import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
+import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
 import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
-import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
+/*import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
 import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
 import frc.team5406.robot.subsystems.shooter.HoodSubsystem;*/
 import frc.team5406.robot.triggers.JoystickMoved;
@@ -35,12 +36,12 @@ import frc.team5406.robot.triggers.TriggerPressed;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   DriveSubsystem m_swerve = new DriveSubsystem();
-  /*FeederSubsystem m_feeder = new FeederSubsystem();
+  FeederSubsystem m_feeder = new FeederSubsystem();
   IntakeSubsystem m_intake = new IntakeSubsystem();
-  BoosterSubsystem m_booster = new BoosterSubsystem();
-  FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
-  HoodSubsystem m_hood = new HoodSubsystem();
-  LimelightSubsystem m_limelight = new LimelightSubsystem();*/
+  //BoosterSubsystem m_booster = new BoosterSubsystem();
+ // FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
+  //HoodSubsystem m_hood = new HoodSubsystem();
+ // LimelightSubsystem m_limelight = new LimelightSubsystem();
 
   // The driver's controller
   XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -64,6 +65,7 @@ public class RobotContainer {
   JoystickButton operatorAButton = new JoystickButton(operatorGamepad, Button.kA.value);
   JoystickButton operatorBButton = new JoystickButton(operatorGamepad, Button.kB.value);
   JoystickButton driverXButton = new JoystickButton(operatorGamepad, Button.kX.value);
+  JoystickButton driverAButton = new JoystickButton(driverGamepad, Button.kA.value);
   JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
   JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
@@ -90,17 +92,20 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /*driverRightTrigger.whileActiveContinuous(
+    driverLeftTrigger.whileActiveContinuous(
       new IntakeCommand(m_intake, m_feeder)
     );
-       driverLeftTrigger.whileActiveContinuous(
+
+    driverAButton.whileActiveContinuous(
+      new OuttakeLowerCommand(m_intake, m_feeder)
+    );
+     /*  driverLeftTrigger.whileActiveContinuous(
       new SetShooter(m_flywheel, m_hood, m_limelight)
     );
 
     driverXButton.whileActiveContinuous(
       new Shoot(m_booster, m_feeder)
     );*/
-
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
   
