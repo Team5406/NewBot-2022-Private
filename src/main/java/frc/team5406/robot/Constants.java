@@ -64,13 +64,12 @@ public final class Constants {
     public static final double K_MAX_SPEED = 3.0; // 3 meters per second
     public static final double K_MAX_ANGULAR_SPEED = Units.rotationsToRadians(0.5); // 1/2 rotation per second
 
-    // Values from LHSPanthers
-    public static final double DRIVE_PID0_P = 2.4874E-08;
+    public static final double DRIVE_PID0_P = 0.08;//8E-02;
     public static final double DRIVE_PID0_I = 0;
     public static final double DRIVE_PID0_D = 0;
     public static final double DRIVE_PID0_F = 0.00156;
 
-    public static final double ROTATION_PID0_P = 1.0;
+    public static final double ROTATION_PID0_P = 0.5;
     public static final double ROTATION_PID0_I = 0.0;
     public static final double ROTATION_PID0_D = 0.1;
     public static final double ROTATION_PID0_F = 0.00156;
@@ -86,9 +85,13 @@ public final class Constants {
     public static final double OUTPUT_RANGE_MIN = -1;
     public static final double OUTPUT_RANGE_MAX = 1;
 
-    public static final double DRIVE_KS = 0.060217;
-    public static final double DRIVE_KV = 2.7283;
-    public static final double DRIVE_KA = 0.12478;
+    /*public static final double DRIVE_KS = 0.56385;
+    public static final double DRIVE_KV = 2.3;//2.379;
+    public static final double DRIVE_KA = 0.7754;*/
+
+    public static final double DRIVE_KS = 0.02;
+    public static final double DRIVE_KV = 2.30;
+    public static final double DRIVE_KA = 0.1;
 
     public static final double ROTATION_KS = 0.17085;
     public static final double ROTATION_KV = 1.5851;
@@ -117,7 +120,7 @@ public final class Constants {
 
     // Current Limits
     public static final int CURRENT_LIMIT_DRIVE_MOTOR = 40;
-    public static final int CURRENT_LIMIT_ROTATION_MOTOR = 20;
+    public static final int CURRENT_LIMIT_ROTATION_MOTOR = 40;
     public static final int CURRENT_LIMIT_SHOOTER_WHEEL = 60;
     public static final int CURRENT_LIMIT_BOOSTER = 20;
     public static final int CURRENT_LIMIT_TURRET_AZIMUTH = 20;
@@ -159,17 +162,13 @@ public final class Constants {
     public static final boolean GYRO_REVERSED = true;
 
     
-    public static final double MAX_SPEED_METERS_PER_SECOND = 2.5;
+    public static final double MAX_SPEED_METERS_PER_SECOND = 2;
     public static final double MAX_ACTUAL_SPEED_METERS_PER_SECOND = 4;
-    public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+    public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1.75;
 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    
-    public static final double S_VOLTS = 0.209;
-    public static final double V_VOLTS = 2.5;
-    public static final double A_VOLTS = 0.55;
 
     public static final double RAMSETE_B = 2;
     public static final double RAMSETE_ZETA = 0.7;

@@ -11,7 +11,7 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 
@@ -32,11 +33,16 @@ public class DriveStraight {
 
     public DriveStraight(DriveSubsystem subsystem) {
         drive = subsystem;
+        SmartDashboard.putNumber("P-drv Gain", Constants.kPXController);
+        SmartDashboard.putNumber("Auto Dist", 4);
+
     }
 
     public Command getAutonomousCommand() {
 
          drive.reset();
+         drive.setPValue();
+         drive.setFFValue();
         /*
         var autoVoltageConstraint = new SwerveDriveKinematicsConstraint(drive.m_kinematics,
                 Constants.MAX_SPEED_METERS_PER_SECOND);*/
@@ -46,28 +52,31 @@ public class DriveStraight {
                 .setKinematics(drive.m_kinematics);
               //  .addConstraint(autoVoltageConstraint);
         config.setReversed(false);
+        double dist = SmartDashboard.getNumber("Auto Dist", 0);
 
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, 0, new Rotation2d(Units.radiansToDegrees(-90))),
+                new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(90))),
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
 
                 ),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(0, 2, new Rotation2d(Units.radiansToDegrees(-90))),
+                new Pose2d(0, 4, new Rotation2d(Units.degreesToRadians(0))),
                 config);
 
         var thetaController = new ProfiledPIDController(
                 Constants.kPThetaController, 0, 0, Constants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
+        double p = SmartDashboard.getNumber("P-drv Gain", 0);
+        
         SwerveControllerCommand swerveCommand = new SwerveControllerCommand(
                 exampleTrajectory,
                 drive::getPose,
                 drive.m_kinematics,
                 // Position controllers
-                new PIDController(Constants.kPXController, 0, 0),
-                new PIDController(Constants.kPYController, 0, 0),
+                new PIDController(p, 0, 0),
+                new PIDController(p, 0, 0),
                 thetaController,
                 drive::setModuleStates,
                 drive);

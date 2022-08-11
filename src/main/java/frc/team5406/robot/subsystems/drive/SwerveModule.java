@@ -34,7 +34,7 @@ public class SwerveModule {
 
 
 
-  private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV, Constants.DRIVE_KA);
+  private SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV, Constants.DRIVE_KA);
   private final SimpleMotorFeedforward rotationFF = new SimpleMotorFeedforward(Constants.ROTATION_KS, Constants.ROTATION_KV, Constants.ROTATION_KA); 
 
   /**
@@ -101,6 +101,12 @@ public class SwerveModule {
     rotationRelEncoder.setPositionConversionFactor(2.0 * Math.PI * Constants.MK4_L2_ROTATION_REDUCTION);
     rotationRelEncoder.setVelocityConversionFactor(2.0 * Math.PI * Constants.MK4_L2_ROTATION_REDUCTION / 60.0);
 
+    SmartDashboard.putNumber("P Gain", Constants.DRIVE_PID0_P);
+    SmartDashboard.putNumber("kV", Constants.DRIVE_KV);
+    SmartDashboard.putNumber("kA", Constants.DRIVE_KA);
+    SmartDashboard.putNumber("kS", Constants.DRIVE_KS);
+
+
     resetEncoders();
 
   }
@@ -142,7 +148,7 @@ public class SwerveModule {
     double driveArbFF = driveFF.calculate(state.speedMetersPerSecond);
     
 
-    drivePIDController.setReference(state.speedMetersPerSecond * Constants.MK4_L2_DRIVE_REDUCTION, 
+    drivePIDController.setReference(state.speedMetersPerSecond, 
      ControlType.kVelocity, 0, driveArbFF, SparkMaxPIDController.ArbFFUnits.kVoltage);
         setReferenceAngle(state.angle.getRadians());
   }
@@ -188,6 +194,24 @@ public class SwerveModule {
     return absPos / Constants.MK4_L2_ROTATION_REDUCTION;
   }*/
 
+  public void setDriveP(){
+  
+     // display PID coefficients on SmartDashboard
+     double p = SmartDashboard.getNumber("P Gain", 0);
+     drivePIDController.setP(p, 0);
+
+   }
+ 
+   public void setDriveFF(){
+  
+    // display PID coefficients on SmartDashboard
+    double kV = SmartDashboard.getNumber("kV", 0);
+    double kA = SmartDashboard.getNumber("kA", 0);
+    double kS = SmartDashboard.getNumber("kS", 0);
+    driveFF = new SimpleMotorFeedforward(kS, kV, kA);
+
+
+  }
 
   public double getAbsoluteAngle() {
     double angle = Math.toRadians(rotateAbsSensor.getAbsolutePosition());

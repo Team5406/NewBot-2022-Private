@@ -97,9 +97,23 @@ public class DriveSubsystem extends SubsystemBase {
         m_odometry.resetPosition(pose, getHeading());
     }
 
+    public void setPValue(){
+        m_frontLeft.setDriveP();
+        m_frontRight.setDriveP();
+        m_backLeft.setDriveP();
+        m_backRight.setDriveP();
+    }
+
+    public void setFFValue(){
+        m_frontLeft.setDriveFF();
+        m_frontRight.setDriveFF();
+        m_backLeft.setDriveFF();
+        m_backRight.setDriveFF();
+    }
+
     //Used for Autos.
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.K_MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.MAX_SPEED_METERS_PER_SECOND);
         m_frontLeft.setDesiredState(desiredStates[0]);
         m_frontRight.setDesiredState(desiredStates[1]);
         m_backLeft.setDesiredState(desiredStates[2]);
@@ -120,5 +134,21 @@ public class DriveSubsystem extends SubsystemBase {
         updateOdometry();
         SmartDashboard.putNumber("Distance Travelled X", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Distance Travelled Y", m_odometry.getPoseMeters().getY());
+        
+
+// Convert to chassis speeds
+ChassisSpeeds chassisSpeeds = m_kinematics.toChassisSpeeds(
+    m_frontLeft.getState(),  m_frontRight.getState(), m_backLeft.getState(), m_backRight.getState());
+
+// Getting individual speeds
+double forward = chassisSpeeds.vxMetersPerSecond;
+double sideways = chassisSpeeds.vyMetersPerSecond;
+double angular = chassisSpeeds.omegaRadiansPerSecond;
+
+SmartDashboard.putNumber("Speed Forward", forward);
+SmartDashboard.putNumber("Speed Sideways", sideways);
+SmartDashboard.putNumber("Rotation Y", angular);
+
+
     }
 }
