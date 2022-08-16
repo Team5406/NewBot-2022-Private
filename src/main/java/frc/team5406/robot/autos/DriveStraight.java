@@ -61,7 +61,7 @@ public class DriveStraight {
 
                 ),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(0, 4, new Rotation2d(Units.degreesToRadians(0))),
+                new Pose2d(0, 1, new Rotation2d(Units.degreesToRadians(90))),
                 config);
 
         var thetaController = new ProfiledPIDController(
