@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.autos.DriveStraight;
 import frc.team5406.robot.autos.FiveBall;
+import frc.team5406.robot.autos.RotateStraight;
+
 import frc.team5406.robot.commands.DefaultDriveCommand;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
@@ -72,6 +74,7 @@ public class RobotContainer {
 
   DriveStraight driveStraight = new DriveStraight(m_swerve);
   FiveBall fiveBall = new FiveBall(m_swerve);
+  RotateStraight rotateStraight = new RotateStraight(m_swerve);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
