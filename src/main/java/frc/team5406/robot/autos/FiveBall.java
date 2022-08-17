@@ -6,6 +6,7 @@ import frc.team5406.robot.commands.TurnToAngle;
 
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -143,6 +144,7 @@ public class FiveBall {
                 new PIDController(Constants.kPXController, 0, 0),
                 new PIDController(Constants.kPYController, 0, 0),
                 thetaController2,
+                () -> drive.desiredRotation(4, 90, Timer.getFPGATimestamp(), path2.getTotalTimeSeconds()),
                 drive::setModuleStates,
                 drive)
                 .andThen(() -> drive.drive(0, 0, 0, false)),
@@ -155,6 +157,7 @@ public class FiveBall {
                 new PIDController(Constants.kPXController, 0, 0),
                 new PIDController(Constants.kPYController, 0, 0),
                 thetaController3,
+                () -> drive.desiredRotation(40, 45, Timer.getFPGATimestamp(), path3.getTotalTimeSeconds()),
                 drive::setModuleStates,
                 drive)
                 .andThen(() -> drive.drive(0, 0, 0, false)),
@@ -165,6 +168,7 @@ public class FiveBall {
                 new PIDController(Constants.kPXController, 0, 0),
                 new PIDController(Constants.kPYController, 0, 0),
                 thetaController4,
+                () -> drive.desiredRotation(45, 57, Timer.getFPGATimestamp(), path4.getTotalTimeSeconds()),
                 drive::setModuleStates,
                 drive)
                 .andThen(() -> drive.drive(0, 0, 0, false)),
