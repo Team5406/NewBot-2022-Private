@@ -27,11 +27,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 
-public class DriveStraight {
+public class TwoBall {
 
     private final DriveSubsystem drive;
 
-    public DriveStraight(DriveSubsystem subsystem) {
+    public TwoBall(DriveSubsystem subsystem) {
         drive = subsystem;
         SmartDashboard.putNumber("P-drv Gain", Constants.kPXController);
         SmartDashboard.putNumber("Auto Dist", 4);
@@ -61,7 +61,7 @@ public class DriveStraight {
 
                 ),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(0, 1, new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(0, 1.19, new Rotation2d(Units.degreesToRadians(90))),
                 config);
 
         var thetaController = new ProfiledPIDController(

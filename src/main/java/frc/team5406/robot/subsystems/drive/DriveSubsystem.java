@@ -88,6 +88,12 @@ public class DriveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(m_navx.getAngle() * (Constants.GYRO_REVERSED ? -1.0 : 1.0));
     }
 
+    public double getHeadingDegrees() {
+        Rotation2d angle = m_navx.getRotation2d();
+        SmartDashboard.putNumber("Heading-Degrees", angle.getDegrees());
+        return getHeading().getDegrees();
+    }
+
     public void reset() {
         zeroGyroscope();
         m_odometry.resetPosition(new Pose2d(), getHeading());
@@ -125,7 +131,12 @@ public class DriveSubsystem extends SubsystemBase {
         Rotation2d setPoint = Rotation2d.fromDegrees(start+(end-start)*((Timer.getFPGATimestamp()-startTime)/totalTime));
         SmartDashboard.putNumber("desiredRot", setPoint.getDegrees());
         return setPoint;
-
+    }
+    
+    public void setTurnStates(double speed) {
+            var swerveModuleStates = m_kinematics.toSwerveModuleStates(
+                             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, speed, m_navx.getRotation2d()));
+        setModuleStates(swerveModuleStates);
     }
 
     /** Updates the field relative position of the robot. */
@@ -156,6 +167,8 @@ double angular = chassisSpeeds.omegaRadiansPerSecond;
 SmartDashboard.putNumber("Speed Forward", forward);
 SmartDashboard.putNumber("Speed Sideways", sideways);
 SmartDashboard.putNumber("Rotation Y", angular);
+
+getHeadingDegrees();
 
 
     }

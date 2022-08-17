@@ -16,6 +16,8 @@ import frc.team5406.robot.autos.FiveBall;
 import frc.team5406.robot.autos.RotateStraight;
 
 import frc.team5406.robot.commands.DefaultDriveCommand;
+import frc.team5406.robot.commands.AlignWithLimeLight;
+import frc.team5406.robot.commands.TurnToAngle;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
@@ -44,7 +46,7 @@ public class RobotContainer {
   //BoosterSubsystem m_booster = new BoosterSubsystem();
  // FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
   //HoodSubsystem m_hood = new HoodSubsystem();
- // LimelightSubsystem m_limelight = new LimelightSubsystem();
+  LimelightSubsystem m_limelight = new LimelightSubsystem();
 
   // The driver's controller
   XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
@@ -69,12 +71,13 @@ public class RobotContainer {
   JoystickButton operatorBButton = new JoystickButton(operatorGamepad, Button.kB.value);
   JoystickButton driverXButton = new JoystickButton(operatorGamepad, Button.kX.value);
   JoystickButton driverAButton = new JoystickButton(driverGamepad, Button.kA.value);
+  JoystickButton driverBButton = new JoystickButton(driverGamepad, Button.kB.value);
   JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
   JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
   DriveStraight driveStraight = new DriveStraight(m_swerve);
-  FiveBall fiveBall = new FiveBall(m_swerve);
   RotateStraight rotateStraight = new RotateStraight(m_swerve);
+  FiveBall fiveBall = new FiveBall(m_swerve, m_limelight);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -111,6 +114,14 @@ public class RobotContainer {
     driverXButton.whileActiveContinuous(
       new Shoot(m_booster, m_feeder)
     );*/
+
+    driverRightTrigger.whileActiveContinuous(
+      new AlignWithLimeLight(m_swerve, m_limelight)
+      );
+
+    driverBButton.whileActiveContinuous(
+      new TurnToAngle(45, m_swerve)
+      );
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
   

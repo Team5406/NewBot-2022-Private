@@ -66,6 +66,11 @@ public class LimelightSubsystem extends SubsystemBase {
         }
     }
 
+    public double getLLtx() {
+        updateLimelightTracking();
+        return lltx;
+    }
+
     public static double calculateShooterSpeed(double ty) {
         double shooterSpeed = 0.0025 * Math.pow(ty, 4) + 0.0073 * Math.pow(ty, 3) + 0.1006 * Math.pow(ty, 2)
                 - 16.377 * ty + 2054.2;

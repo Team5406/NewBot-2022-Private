@@ -204,6 +204,18 @@ public final class Constants {
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
 
+    public static final double TURN_P = 0.1;
+    public static final double TURN_I = 0;
+    public static final double TURN_D = 0;
+    public static final double TURN_TOLERANCE = 2; //degrees 
+    public static final double TURN_RATE_TOLERANCE = 5; //degrees per second
+
+    public static final double LL_TURN_P = 0.15;
+    public static final double LL_TURN_I = 0;
+    public static final double LL_TURN_D = 0;
+    public static final double LL_TURN_TOLERANCE = 2; //degrees 
+    public static final double LL_TURN_RATE_TOLERANCE = 5; //degrees per second
+
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
     new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
