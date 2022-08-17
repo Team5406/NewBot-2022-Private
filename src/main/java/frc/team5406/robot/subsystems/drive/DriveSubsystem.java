@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -87,6 +88,12 @@ public class DriveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(m_navx.getAngle() * (Constants.GYRO_REVERSED ? -1.0 : 1.0));
     }
 
+    public double getHeadingDegrees() {
+        Rotation2d angle = m_navx.getRotation2d();
+        SmartDashboard.putNumber("Heading-Degrees", angle.getDegrees());
+        return getHeading().getDegrees();
+    }
+
     public void reset() {
         zeroGyroscope();
         m_odometry.resetPosition(new Pose2d(), getHeading());
@@ -120,6 +127,12 @@ public class DriveSubsystem extends SubsystemBase {
         m_backRight.setDesiredState(desiredStates[3]);
     }
 
+    public void setTurnStates(double speed) {
+            var swerveModuleStates = m_kinematics.toSwerveModuleStates(
+                             ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, speed, m_navx.getRotation2d()));
+        setModuleStates(swerveModuleStates);
+    }
+
     /** Updates the field relative position of the robot. */
     public void updateOdometry() {
         m_odometry.update(
@@ -148,6 +161,8 @@ double angular = chassisSpeeds.omegaRadiansPerSecond;
 SmartDashboard.putNumber("Speed Forward", forward);
 SmartDashboard.putNumber("Speed Sideways", sideways);
 SmartDashboard.putNumber("Rotation Y", angular);
+
+getHeadingDegrees();
 
 
     }
