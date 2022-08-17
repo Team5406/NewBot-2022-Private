@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -118,6 +119,13 @@ public class DriveSubsystem extends SubsystemBase {
         m_frontRight.setDesiredState(desiredStates[1]);
         m_backLeft.setDesiredState(desiredStates[2]);
         m_backRight.setDesiredState(desiredStates[3]);
+    }
+
+    public Rotation2d desiredRotation(double start, double end, double startTime, double totalTime){
+        Rotation2d setPoint = Rotation2d.fromDegrees(start+(end-start)*((Timer.getFPGATimestamp()-startTime)/totalTime));
+        SmartDashboard.putNumber("desiredRot", setPoint.getDegrees());
+        return setPoint;
+
     }
 
     /** Updates the field relative position of the robot. */
