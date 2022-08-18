@@ -1,7 +1,7 @@
 package frc.team5406.robot.autos;
 
 import frc.team5406.robot.Constants;
-import frc.team5406.robot.commands.AlignWithLimeLight;
+import frc.team5406.robot.commands.AlignWithLimelight;
 import frc.team5406.robot.commands.TurnToAngle;
 
 import java.util.List;
@@ -79,11 +79,11 @@ public class FiveBall {
 
 
         Trajectory path2 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, Units.inchesToMeters(36), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(0, Units.inchesToMeters(36), new Rotation2d(Units.degreesToRadians(315))),
                 List.of(
 
                 ),
-                new Pose2d(Units.inchesToMeters(84), Units.inchesToMeters(-4), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(Units.inchesToMeters(84), Units.inchesToMeters(-4), new Rotation2d(Units.degreesToRadians(315))),
                 fwdConfig);
 
 
@@ -93,11 +93,11 @@ public class FiveBall {
 
 
         Trajectory path3 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(Units.inchesToMeters(84), Units.inchesToMeters(-4), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(Units.inchesToMeters(84), Units.inchesToMeters(-4), new Rotation2d(Units.degreesToRadians(15))),
                 List.of(
 
                 ),
-                new Pose2d(Units.inchesToMeters(233), Units.inchesToMeters(10), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(Units.inchesToMeters(233), Units.inchesToMeters(10), new Rotation2d(Units.degreesToRadians(15))),
                 fwdConfig);
 
 
@@ -107,11 +107,11 @@ public class FiveBall {
 
 
         Trajectory path4 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(Units.inchesToMeters(233), Units.inchesToMeters(10), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(Units.inchesToMeters(233), Units.inchesToMeters(10), new Rotation2d(Units.degreesToRadians(200))),
                 List.of(
 
                 ),
-                new Pose2d(Units.inchesToMeters(108), Units.inchesToMeters(4), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(Units.inchesToMeters(108), Units.inchesToMeters(4), new Rotation2d(Units.degreesToRadians(200))),
                 fwdConfig);
 
 
@@ -136,7 +136,7 @@ public class FiveBall {
                 drive)
                 .andThen(() -> drive.drive(0, 0, 0, false)),
             new TurnToAngle(-4, drive),
-            new AlignWithLimeLight(drive, limelight),
+            new AlignWithLimelight(drive, limelight),
             new SwerveControllerCommand(
                 path2,
                 drive::getPose,
@@ -149,7 +149,7 @@ public class FiveBall {
                 drive)
                 .andThen(() -> drive.drive(0, 0, 0, false)),
                 new TurnToAngle(-40, drive),
-            new AlignWithLimeLight(drive, limelight),
+            new AlignWithLimelight(drive, limelight),
             new SwerveControllerCommand(
                 path3,
                 drive::getPose,
@@ -173,7 +173,7 @@ public class FiveBall {
                 drive)
                 .andThen(() -> drive.drive(0, 0, 0, false)),
                 new TurnToAngle(-57, drive),
-            new AlignWithLimeLight(drive, limelight)
+            new AlignWithLimelight(drive, limelight)
             );
 
 

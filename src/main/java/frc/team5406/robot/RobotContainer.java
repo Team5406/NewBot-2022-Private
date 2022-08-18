@@ -16,7 +16,8 @@ import frc.team5406.robot.autos.FiveBall;
 import frc.team5406.robot.autos.RotateStraight;
 
 import frc.team5406.robot.commands.DefaultDriveCommand;
-import frc.team5406.robot.commands.AlignWithLimeLight;
+import frc.team5406.robot.commands.AlignWithLimelight;
+import frc.team5406.robot.commands.DriveWithLimelight;
 import frc.team5406.robot.commands.TurnToAngle;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
@@ -116,8 +117,10 @@ public class RobotContainer {
     );*/
 
     driverRightTrigger.whileActiveContinuous(
-      new AlignWithLimeLight(m_swerve, m_limelight)
-      );
+      new DriveWithLimelight(m_swerve, m_limelight,
+      () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
+      () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED
+    ));
 
     driverBButton.whileActiveContinuous(
       new TurnToAngle(45, m_swerve)
