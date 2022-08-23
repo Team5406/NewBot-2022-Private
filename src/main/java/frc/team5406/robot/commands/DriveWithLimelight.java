@@ -35,7 +35,7 @@ public class DriveWithLimelight extends PIDCommand {
         // center limelight on target, tx = 0
         0,
         // Pipe output to turn robot
-        output -> drive.drive(translationXSupplier.getAsDouble(), translationYSupplier.getAsDouble(),output, true),
+        output -> drive.drive(translationXSupplier.getAsDouble(), translationYSupplier.getAsDouble(), output, true),
         // Require the drive
         drive);
         m_swerve = drive;
