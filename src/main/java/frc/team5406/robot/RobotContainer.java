@@ -25,6 +25,8 @@ import frc.team5406.robot.subsystems.LimelightSubsystem;
 //import frc.team5406.robot.commands.IntakeCommand;
 //import frc.team5406.robot.commands.OuttakeLowerCommand;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
+import frc.team5406.robot.subsystems.gates.BackGateSubsystem;
+import frc.team5406.robot.subsystems.gates.FrontGateSubsystem;
 //import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
 //import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
 /*import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
@@ -47,6 +49,8 @@ public class RobotContainer {
   //BoosterSubsystem m_booster = new BoosterSubsystem();
  // FlywheelSubsystem m_flywheel = new FlywheelSubsystem();
   //HoodSubsystem m_hood = new HoodSubsystem();
+ // FrontGateSubsystem m_frontGate = new FrontGateSubsystem();
+  //BackGateSubsystem m_backGate = new BackGateSubsystem();
   LimelightSubsystem m_limelight = new LimelightSubsystem();
 
   // The driver's controller

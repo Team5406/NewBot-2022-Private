@@ -23,8 +23,6 @@ public class FeederSubsystem extends SubsystemBase {
 
   private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
 
-  private Solenoid frontGate, backGate;
-
   public void setupMotors() {
     conveyorTop.restoreFactoryDefaults();
     conveyorBottom.restoreFactoryDefaults();
@@ -55,8 +53,6 @@ public class FeederSubsystem extends SubsystemBase {
     conveyorBottomPID.setIZone(Constants.PID_IZ_VALUE, 0);
     conveyorBottomPID.setFF(Constants.CONVEYOR_BOTTOM_PID1_F, 0);
 
-    frontGate = new Solenoid(PneumaticsModuleType.REVPH, Constants.CYLINDER_FEEDER_GATE_TOP_ONE);
-    backGate = new Solenoid(PneumaticsModuleType.REVPH, Constants.CYLINDER_FEEDER_GATE_BOTTOM_ONE);
 
     conveyorTopEncoder.setPositionConversionFactor(Constants.GEAR_RATIO_CONVEYOR_TOP);
     conveyorTopEncoder.setVelocityConversionFactor(Constants.GEAR_RATIO_CONVEYOR_TOP);
@@ -69,21 +65,7 @@ public class FeederSubsystem extends SubsystemBase {
     conveyorBottom.burnFlash();
   }
 
-  public void frontGateRetract() {
-    frontGate.set(Constants.FRONT_GATE_RETRACT);
-  }
 
-  public void frontGateExtend() {
-    frontGate.set(Constants.FRONT_GATE_EXTEND);
-  }
-
-  public void backGateRetract() {
-    backGate.set(Constants.BACK_GATE_RETRACT);
-  }
-
-  public void backGateExtend() {
-    backGate.set(Constants.BACK_GATE_EXTEND);
-  }
 
   public void resetEncoders() {
     conveyorTopEncoder.setPosition(0);
