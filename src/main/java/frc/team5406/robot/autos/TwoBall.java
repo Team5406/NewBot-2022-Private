@@ -1,6 +1,12 @@
 package frc.team5406.robot.autos;
 
 import frc.team5406.robot.Constants;
+import frc.team5406.robot.commands.AlignWithLimelight;
+import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.ManualSetShooter;
+import frc.team5406.robot.commands.ResetHoodEncoder;
+import frc.team5406.robot.commands.SetShooter;
+import frc.team5406.robot.commands.Shoot;
 
 import java.util.List;
 
@@ -22,27 +28,52 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import frc.team5406.robot.subsystems.LimelightSubsystem;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
+import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
+import frc.team5406.robot.subsystems.gates.BackGateSubsystem;
+import frc.team5406.robot.subsystems.gates.FrontGateSubsystem;
+import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
+import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
+import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
+import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
+import frc.team5406.robot.triggers.ResetHood;
 
 public class TwoBall {
 
     private final DriveSubsystem drive;
+    private final FeederSubsystem feeder;
+    private final IntakeSubsystem intake;
+    private final BoosterSubsystem booster;
+    private final FlywheelSubsystem flywheel;
+    private final HoodSubsystem hood;
+    private final FrontGateSubsystem frontGate;
+    private final BackGateSubsystem backGate;
+    private final LimelightSubsystem limelight;
 
-    public TwoBall(DriveSubsystem subsystem) {
-        drive = subsystem;
-        SmartDashboard.putNumber("P-drv Gain", Constants.kPXController);
-        SmartDashboard.putNumber("Auto Dist", 4);
+    public TwoBall(DriveSubsystem _drive, FeederSubsystem _feeder, IntakeSubsystem _intake, 
+    BoosterSubsystem _booster, FlywheelSubsystem _flywheel, HoodSubsystem _hood, FrontGateSubsystem _frontGate, 
+    BackGateSubsystem _backGate, LimelightSubsystem _limelight) {
+        drive = _drive;
+        feeder = _feeder;
+        intake = _intake; 
+        booster = _booster;
+        flywheel = _flywheel;
+        hood = _hood;
+        frontGate = _frontGate;
+        backGate = _backGate;
+        limelight = _limelight;
 
     }
 
     public Command getAutonomousCommand() {
-
          drive.reset();
-         drive.setPValue();
-         drive.setFFValue();
         /*
         var autoVoltageConstraint = new SwerveDriveKinematicsConstraint(drive.m_kinematics,
                 Constants.MAX_SPEED_METERS_PER_SECOND);*/
@@ -52,7 +83,6 @@ public class TwoBall {
                 .setKinematics(drive.m_kinematics);
               //  .addConstraint(autoVoltageConstraint);
         config.setReversed(false);
-        double dist = SmartDashboard.getNumber("Auto Dist", 0);
 
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(90))),
@@ -67,24 +97,43 @@ public class TwoBall {
         var thetaController = new ProfiledPIDController(
                 Constants.kPThetaController, 0, 0, Constants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        double p = SmartDashboard.getNumber("P-drv Gain", 0);
         
-        SwerveControllerCommand swerveCommand = new SwerveControllerCommand(
-                exampleTrajectory,
-                drive::getPose,
-                drive.m_kinematics,
-                // Position controllers
-                new PIDController(p, 0, 0),
-                new PIDController(p, 0, 0),
-                thetaController,
-                drive::setModuleStates,
-                drive);
+     
         // Reset odometry to the starting pose of the trajectory.
         drive.setPosition(exampleTrajectory.getInitialPose());
 
         // Run path following command, then stop at the end.
-        return swerveCommand.andThen(() -> drive.drive(0, 0, 0, false));
+        return new ParallelDeadlineGroup(
+                new SequentialCommandGroup(
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(2),
+                                new ResetHoodEncoder(hood)
+                        ),
+                        new ParallelDeadlineGroup(
+                                new SwerveControllerCommand(
+                                        exampleTrajectory,
+                                        drive::getPose,
+                                        drive.m_kinematics,
+                                        // Position controllers
+                                        new PIDController(Constants.kPXController, 0, 0),
+                                        new PIDController(Constants.kPYController, 0, 0),
+                                        thetaController,
+                                        drive::setModuleStates,
+                                        drive).andThen(() -> drive.drive(0, 0, 0, false)),
+                                new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                        ),
+                        new AlignWithLimelight(drive, limelight),
+                        new SequentialCommandGroup(
+                                new ParallelRaceGroup(
+                                    new WaitCommand(2),
+                                    new SetShooter(flywheel, hood, limelight)
+                                )
+                        ),
+                new Shoot(booster, feeder)
+
+                ), new IntakeCommand(intake, feeder, backGate, frontGate)
+        );
+
     }
 
 }

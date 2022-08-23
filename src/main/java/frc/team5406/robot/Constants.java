@@ -55,9 +55,9 @@ public final class Constants {
     //public static final int MOTOR_CLIMBER_TWO = 17; // SparkMax, NEO
 
     // PH Ports
-    public static final int CYLINDER_FEEDER_GATE_TOP_ONE = 7; // FIXME
-    public static final int CYLINDER_FEEDER_GATE_BOTTOM_ONE = 9; // FIXME
-    public static final int CYLINDER_INTAKE_PIVOT_ONE = 8;
+    public static final int CYLINDER_FEEDER_GATE_TOP_ONE = 5; 
+    public static final int CYLINDER_FEEDER_GATE_BOTTOM_ONE = 6;
+    public static final int CYLINDER_INTAKE_PIVOT_ONE = 7;
 
     public static final double MAXIMUM_VOLTAGE = 12.0;
 
@@ -219,5 +219,8 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
     new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+    public static final double HOOD_ZEROING_SPEED = -0.165;
+    public static final int NEO550_CURRENT_SPIKE = 20;
     
 }
