@@ -2,6 +2,11 @@ package frc.team5406.robot.autos;
 
 import frc.team5406.robot.Constants;
 import frc.team5406.robot.commands.AlignWithLimelight;
+import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.ManualSetShooter;
+import frc.team5406.robot.commands.ResetHoodEncoder;
+import frc.team5406.robot.commands.SetShooter;
+import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.commands.TurnToAngle;
 
 import java.util.List;
@@ -25,23 +30,47 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
+import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
+import frc.team5406.robot.subsystems.gates.BackGateSubsystem;
+import frc.team5406.robot.subsystems.gates.FrontGateSubsystem;
+import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
+import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
+import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
+import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
 
 public class FiveBall {
 
-    private final DriveSubsystem drive;
-    private final LimelightSubsystem limelight;
+        private final DriveSubsystem drive;
+        private final FeederSubsystem feeder;
+        private final IntakeSubsystem intake;
+        private final BoosterSubsystem booster;
+        private final FlywheelSubsystem flywheel;
+        private final HoodSubsystem hood;
+        private final FrontGateSubsystem frontGate;
+        private final BackGateSubsystem backGate;
+        private final LimelightSubsystem limelight;
 
-    public FiveBall(DriveSubsystem subsystem, LimelightSubsystem _limelight) {
-        drive = subsystem;
+    public FiveBall(DriveSubsystem _drive, FeederSubsystem _feeder, IntakeSubsystem _intake, 
+    BoosterSubsystem _booster, FlywheelSubsystem _flywheel, HoodSubsystem _hood, FrontGateSubsystem _frontGate, 
+    BackGateSubsystem _backGate, LimelightSubsystem _limelight) {
+        drive = _drive;
+        feeder = _feeder;
+        intake = _intake; 
+        booster = _booster;
+        flywheel = _flywheel;
+        hood = _hood;
+        frontGate = _frontGate;
+        backGate = _backGate;
         limelight = _limelight;
-        SmartDashboard.putNumber("P-drv Gain", Constants.kPXController);
-        SmartDashboard.putNumber("Auto Dist", 4);
-
     }
 
     public Command getAutonomousCommand() {
@@ -123,58 +152,96 @@ public class FiveBall {
         drive.setPosition(path1.getInitialPose());
 
 
-        return   
-        new SequentialCommandGroup(
-            new SwerveControllerCommand(
-                path1,
-                drive::getPose,
-                drive.m_kinematics,
-                new PIDController(Constants.kPXController, 0, 0),
-                new PIDController(Constants.kPYController, 0, 0),
-                thetaController,
-                drive::setModuleStates,
-                drive)
-                .andThen(() -> drive.drive(0, 0, 0, false)),
-            new TurnToAngle(-4, drive),
-            new AlignWithLimelight(drive, limelight),
-            new SwerveControllerCommand(
-                path2,
-                drive::getPose,
-                drive.m_kinematics,
-                new PIDController(Constants.kPXController, 0, 0),
-                new PIDController(Constants.kPYController, 0, 0),
-                thetaController2,
-                () -> drive.desiredRotation(4, 90, Timer.getFPGATimestamp(), path2.getTotalTimeSeconds()),
-                drive::setModuleStates,
-                drive)
-                .andThen(() -> drive.drive(0, 0, 0, false)),
-                new TurnToAngle(-40, drive),
-            new AlignWithLimelight(drive, limelight),
-            new SwerveControllerCommand(
-                path3,
-                drive::getPose,
-                drive.m_kinematics,
-                new PIDController(Constants.kPXController, 0, 0),
-                new PIDController(Constants.kPYController, 0, 0),
-                thetaController3,
-                () -> drive.desiredRotation(40, 45, Timer.getFPGATimestamp(), path3.getTotalTimeSeconds()),
-                drive::setModuleStates,
-                drive)
-                .andThen(() -> drive.drive(0, 0, 0, false)),
-            new SwerveControllerCommand(
-                path4,
-                drive::getPose,
-                drive.m_kinematics,
-                new PIDController(Constants.kPXController, 0, 0),
-                new PIDController(Constants.kPYController, 0, 0),
-                thetaController4,
-                () -> drive.desiredRotation(45, 57, Timer.getFPGATimestamp(), path4.getTotalTimeSeconds()),
-                drive::setModuleStates,
-                drive)
-                .andThen(() -> drive.drive(0, 0, 0, false)),
-                new TurnToAngle(-57, drive),
-            new AlignWithLimelight(drive, limelight)
-            );
+        return new ParallelDeadlineGroup(
+                new SequentialCommandGroup(
+                        new ParallelRaceGroup(
+                                new WaitCommand(1.5),
+                                new ResetHoodEncoder(hood)
+                        ),
+                        new ParallelDeadlineGroup(
+                                new SwerveControllerCommand(
+                                        path1,
+                                        drive::getPose,
+                                        drive.m_kinematics,
+                                        new PIDController(Constants.kPXController, 0, 0),
+                                        new PIDController(Constants.kPYController, 0, 0),
+                                        thetaController,
+                                        drive::setModuleStates,
+                                        drive)
+                                        .andThen(() -> drive.drive(0, 0, 0, false)),
+                                        new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                        ),
+                        new TurnToAngle(-4, drive),
+                        new ParallelDeadlineGroup(
+                                new AlignWithLimelight(drive, limelight),
+                                new SetShooter(flywheel, hood, limelight)
+                        ),
+                        new ParallelRaceGroup(
+                                new WaitCommand(1),
+                                new Shoot(booster, feeder)
+                        ),
+                        new ParallelDeadlineGroup(
+                                new SwerveControllerCommand(
+                                        path2,
+                                        drive::getPose,
+                                        drive.m_kinematics,
+                                        new PIDController(Constants.kPXController, 0, 0),
+                                        new PIDController(Constants.kPYController, 0, 0),
+                                         thetaController2,
+                                        () -> drive.desiredRotation(4, 90, Timer.getFPGATimestamp(), path2.getTotalTimeSeconds()),
+                                        drive::setModuleStates,
+                                        drive)
+                                        .andThen(() -> drive.drive(0, 0, 0, false)), 
+                                new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                        ), 
+                        new TurnToAngle(-40, drive),
+                        new ParallelDeadlineGroup(
+                                new AlignWithLimelight(drive, limelight),
+                                new SetShooter(flywheel, hood, limelight)
+                        ),
+                        new ParallelRaceGroup(
+                                new WaitCommand(1),
+                                new Shoot(booster, feeder)
+                        ),
+                        new SwerveControllerCommand(
+                            path3,
+                            drive::getPose,
+                            drive.m_kinematics,
+                            new PIDController(Constants.kPXController, 0, 0),
+                            new PIDController(Constants.kPYController, 0, 0),
+                            thetaController3,
+                            () -> drive.desiredRotation(40, 45, Timer.getFPGATimestamp(), path3.getTotalTimeSeconds()),
+                            drive::setModuleStates,
+                            drive)
+                            .andThen(() -> drive.drive(0, 0, 0, false)),
+                        
+                        new ParallelDeadlineGroup(
+                                new SwerveControllerCommand(
+                                        path4,
+                                        drive::getPose,
+                                        drive.m_kinematics,
+                                        new PIDController(Constants.kPXController, 0, 0),
+                                        new PIDController(Constants.kPYController, 0, 0),
+                                        thetaController4,
+                                        () -> drive.desiredRotation(45, 57, Timer.getFPGATimestamp(), path4.getTotalTimeSeconds()),
+                                        drive::setModuleStates,
+                                        drive)
+                                        .andThen(() -> drive.drive(0, 0, 0, false)), 
+                                new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                        ),
+                        new TurnToAngle(-57, drive),
+                        new ParallelDeadlineGroup(
+                                new AlignWithLimelight(drive, limelight),
+                                new SetShooter(flywheel, hood, limelight)
+                        ),
+                        new ParallelRaceGroup(
+                                new WaitCommand(1),
+                                new Shoot(booster, feeder)
+                        )
+                ),
+                new IntakeCommand(intake, feeder, backGate, frontGate)
+        );
+
 
 
 
