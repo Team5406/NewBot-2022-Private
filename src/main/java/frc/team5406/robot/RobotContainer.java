@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.autos.DriveStraight;
 import frc.team5406.robot.autos.FiveBall;
+import frc.team5406.robot.autos.OneBall;
 import frc.team5406.robot.autos.RotateStraight;
 import frc.team5406.robot.autos.TwoBall;
 import frc.team5406.robot.commands.DefaultDriveCommand;
@@ -86,6 +87,7 @@ public class RobotContainer {
 
   DriveStraight driveStraight = new DriveStraight(m_swerve);
   RotateStraight rotateStraight = new RotateStraight(m_swerve);
+  OneBall oneBall = new OneBall(m_swerve, m_feeder, m_intake, m_booster, m_flywheel, m_hood, m_frontGate, m_backGate, m_limelight);
   TwoBall twoBall = new TwoBall(m_swerve, m_feeder, m_intake, m_booster, m_flywheel, m_hood, m_frontGate, m_backGate, m_limelight);
   FiveBall fiveBall = new FiveBall(m_swerve, m_feeder, m_intake, m_booster, m_flywheel, m_hood, m_frontGate, m_backGate, m_limelight);
 
@@ -108,7 +110,7 @@ public class RobotContainer {
 
         // Add commands to the autonomous command chooser
         m_chooser.setDefaultOption("Drive Straight Auto", driveStraight.getAutonomousCommand());
-       // m_chooser.addOption("OneBall", oneBall.getAutonomousCommand());
+        m_chooser.addOption("OneBall", oneBall.getAutonomousCommand());
         m_chooser.addOption("TwoBall", twoBall.getAutonomousCommand());
         m_chooser.addOption("FiveBallRight", fiveBall.getAutonomousCommand());
     
