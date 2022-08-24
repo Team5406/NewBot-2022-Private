@@ -77,7 +77,7 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public void enableCompressor() {
-    compressor.enableAnalog(Constants.MIN_PRESSURE, Constants.MAX_PRESSURE);
+    compressor.enableDigital();
   }
 
   public void setConveyorTopSpeed(double RPM) {

@@ -222,5 +222,8 @@ public final class Constants {
 
     public static final double HOOD_ZEROING_SPEED = -0.165;
     public static final int NEO550_CURRENT_SPIKE = 20;
+
+    public static final double HOOD_ANGLE_LOW_LOB = 20;
+    public static final double FLYWHEEL_SPEED_LOW_LOB = 1000;
     
 }

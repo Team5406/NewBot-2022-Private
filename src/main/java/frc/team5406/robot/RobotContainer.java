@@ -24,8 +24,9 @@ import frc.team5406.robot.commands.TurnToAngle;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
-//import frc.team5406.robot.commands.IntakeCommand;
-//import frc.team5406.robot.commands.OuttakeLowerCommand;
+import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.ManualSetShooter;
+import frc.team5406.robot.commands.OuttakeLowerCommand;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
 import frc.team5406.robot.subsystems.gates.BackGateSubsystem;
@@ -79,6 +80,7 @@ public class RobotContainer {
   JoystickButton driverXButton = new JoystickButton(operatorGamepad, Button.kX.value);
   JoystickButton driverAButton = new JoystickButton(driverGamepad, Button.kA.value);
   JoystickButton driverBButton = new JoystickButton(driverGamepad, Button.kB.value);
+  JoystickButton driverYButton = new JoystickButton(driverGamepad, Button.kY.value);
   JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
   JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
@@ -121,30 +123,38 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-   /* driverLeftTrigger.whileActiveContinuous(
-      new IntakeCommand(m_intake, m_feeder)
-    );*/
+    driverLeftTrigger.whileActiveContinuous(
+      new IntakeCommand(m_intake, m_feeder, m_backGate, m_frontGate)
+    );
 
-    /*driverAButton.whileActiveContinuous(
-      new OuttakeLowerCommand(m_intake, m_feeder)
-    );*/
-     /*  driverLeftTrigger.whileActiveContinuous(
-      new SetShooter(m_flywheel, m_hood, m_limelight)
+    driverAButton.whileActiveContinuous(
+      new OuttakeLowerCommand(m_intake, m_feeder, m_backGate, m_frontGate)
+    );
+
+    driverBButton.whileActiveContinuous(
+      new Shoot(m_booster, m_feeder)
     );
 
     driverXButton.whileActiveContinuous(
-      new Shoot(m_booster, m_feeder)
-    );*/
+      new ManualSetShooter(m_flywheel, m_hood, Constants.FLYWHEEL_SPEED_LOW_LOB, Constants.HOOD_ANGLE_LOW_LOB)
+    );
+    
+    driverYButton.whileActiveContinuous(
+      new ManualSetShooter(m_flywheel, m_hood, Constants.FLYWHEEL_SPEED_FENDER_HIGH, Constants.HOOD_ANGLE_FENDER_HIGH)
+    );
 
     driverRightTrigger.whileActiveContinuous(
+      new SetShooter(m_flywheel, m_hood, m_limelight)
+    );
+
+
+
+    driverLeftBumper.whileActiveContinuous(
       new DriveWithLimelight(m_swerve, m_limelight,
       () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
       () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED
     ));
 
-    driverBButton.whileActiveContinuous(
-      new TurnToAngle(45, m_swerve)
-      );
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
   
