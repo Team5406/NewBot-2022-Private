@@ -27,6 +27,7 @@ import frc.team5406.robot.subsystems.LimelightSubsystem;
 import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.commands.ManualSetShooter;
 import frc.team5406.robot.commands.OuttakeLowerCommand;
+import frc.team5406.robot.commands.ResetHoodEncoder;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
 import frc.team5406.robot.subsystems.gates.BackGateSubsystem;
@@ -36,6 +37,7 @@ import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
 import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
 import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
 import frc.team5406.robot.triggers.JoystickMoved;
+import frc.team5406.robot.triggers.ResetHood;
 import frc.team5406.robot.triggers.TriggerPressed;
 
 /**
@@ -65,6 +67,7 @@ public class RobotContainer {
   Trigger operatorLeftTrigger = new TriggerPressed(operatorGamepad::getLeftTriggerAxis);
   Trigger operatorRightTrigger = new TriggerPressed(operatorGamepad::getRightTriggerAxis);
   Trigger operatorJoystickRight = new JoystickMoved(operatorGamepad::getRightY);
+  Trigger resetHoodTrigger = new ResetHood(m_hood);
 
   JoystickButton operatorLeftBumper = new JoystickButton(operatorGamepad, Button.kLeftBumper.value);
   JoystickButton operatorRightModifier = new JoystickButton(operatorGamepad, Button.kStart.value);
@@ -161,6 +164,10 @@ public class RobotContainer {
 
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
+
+    resetHoodTrigger.whileActiveContinuous(
+      new ResetHoodEncoder(m_hood)
+    );
   
   }
 
