@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.autos.DriveStraight;
@@ -21,7 +21,6 @@ import frc.team5406.robot.autos.TwoBall;
 import frc.team5406.robot.commands.DefaultDriveCommand;
 import frc.team5406.robot.commands.AlignWithLimelight;
 import frc.team5406.robot.commands.DriveWithLimelight;
-import frc.team5406.robot.commands.TurnToAngle;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
@@ -146,7 +145,10 @@ public class RobotContainer {
     );
 
     driverRightTrigger.whileActiveContinuous(
-      new SetShooter(m_flywheel, m_hood, m_limelight)
+      new ParallelCommandGroup(
+        new SetShooter(m_flywheel, m_hood, m_limelight),
+        new AlignWithLimelight(m_swerve, m_limelight)
+      )
     );
 
 

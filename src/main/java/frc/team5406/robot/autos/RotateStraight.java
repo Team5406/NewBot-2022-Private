@@ -5,26 +5,17 @@ import frc.team5406.robot.Constants;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.function.Supplier;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
@@ -54,7 +45,6 @@ public class RotateStraight {
                 .setKinematics(drive.m_kinematics);
               //  .addConstraint(autoVoltageConstraint);
         config.setReversed(false);
-        double dist = SmartDashboard.getNumber("Auto Dist", 0);
 
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(90))),
@@ -70,7 +60,6 @@ public class RotateStraight {
                 Constants.kPThetaController, 0, 0, Constants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        double p = SmartDashboard.getNumber("P-drv Gain", 0);
         double startTime = Timer.getFPGATimestamp();
 
         Supplier<Rotation2d> targetAngle = () ->  drive.desiredRotation(0, 45, startTime, exampleTrajectory.getTotalTimeSeconds());

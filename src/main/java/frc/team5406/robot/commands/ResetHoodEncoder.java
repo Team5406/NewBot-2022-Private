@@ -3,7 +3,6 @@ package frc.team5406.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team5406.robot.Constants;
 import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
-import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
 
 public class ResetHoodEncoder extends CommandBase {
 

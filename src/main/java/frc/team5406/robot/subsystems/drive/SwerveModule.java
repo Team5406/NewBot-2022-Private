@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team5406.robot.Constants;
@@ -35,7 +34,7 @@ public class SwerveModule {
 
 
   private SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(Constants.DRIVE_KS, Constants.DRIVE_KV, Constants.DRIVE_KA);
-  private final SimpleMotorFeedforward rotationFF = new SimpleMotorFeedforward(Constants.ROTATION_KS, Constants.ROTATION_KV, Constants.ROTATION_KA); 
+  //private final SimpleMotorFeedforward rotationFF = new SimpleMotorFeedforward(Constants.ROTATION_KS, Constants.ROTATION_KV, Constants.ROTATION_KA); 
 
   /**
    * Creates a new SwerveModule object
