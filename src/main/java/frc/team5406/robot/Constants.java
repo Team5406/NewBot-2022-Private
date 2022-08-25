@@ -47,10 +47,10 @@ public final class Constants {
     public static final int MOTOR_CONVEYOR_BOTTOM_ONE = 9; // SparkMax, NEO550
     public static final int MOTOR_CONVEYOR_TOP_ONE = 10; // SparkMax, NEO550
     //public static final int MOTOR_TURRET_AZIMUTH_ONE = 11; // SparkMax, NEO550
-    public static final int MOTOR_BOOSTER_ONE = 12; // SparkMax, NEO
-    public static final int MOTOR_HOOD_ONE = 13; // SparkMax, NEO550
-    public static final int MOTOR_SHOOTER_WHEEL_ONE = 14; // SparkMax, NEO
-    public static final int MOTOR_SHOOTER_WHEEL_TWO = 15; // SparkMax, NEO
+    public static final int MOTOR_BOOSTER_ONE = 11; // SparkMax, NEO
+    public static final int MOTOR_HOOD_ONE = 14; // SparkMax, NEO550
+    public static final int MOTOR_SHOOTER_WHEEL_ONE = 12; // SparkMax, NEO
+    public static final int MOTOR_SHOOTER_WHEEL_TWO = 13; // SparkMax, NEO
     //public static final int MOTOR_CLIMBER_ONE = 16; // SparkMax, NEO
     //public static final int MOTOR_CLIMBER_TWO = 17; // SparkMax, NEO
 
