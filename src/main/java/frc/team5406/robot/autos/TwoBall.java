@@ -118,17 +118,19 @@ public class TwoBall {
                                         thetaController,
                                         drive::setModuleStates,
                                         drive).andThen(() -> drive.drive(0, 0, 0, false)),
-                                new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                                new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ),
                         new AlignWithLimelight(drive, limelight),
                         new SequentialCommandGroup(
                                 new ParallelRaceGroup(
                                     new WaitCommand(2),
-                                    new SetShooter(flywheel, hood, limelight)
+                                    new SetShooter(flywheel, hood, booster, limelight)
                                 )
                         ),
-                new Shoot(booster),
-                new GateTopOpen(backGate)
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1),  
+                                new Shoot(backGate)
+                        )
 
                 ), new FeedInCommand(feeder)
         

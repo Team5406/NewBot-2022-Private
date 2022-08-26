@@ -33,7 +33,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         shooter.setSmartCurrentLimit(Constants.CURRENT_LIMIT_SHOOTER_WHEEL);
         shooterFollower.setSmartCurrentLimit(Constants.CURRENT_LIMIT_SHOOTER_WHEEL);
 
-        shooter.setInverted(false);
+        shooter.setInverted(true);
         shooterFollower.follow(shooter, true);
 
         resetEncoders();

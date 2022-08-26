@@ -38,7 +38,6 @@ public class AlignWithLimelight extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(Constants.LL_TURN_TOLERANCE);
-        addRequirements(drive);
   }
 
   @Override

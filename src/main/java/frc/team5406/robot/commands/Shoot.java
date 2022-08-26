@@ -3,25 +3,24 @@ package frc.team5406.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team5406.robot.Constants;
-import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
+import frc.team5406.robot.subsystems.gates.BackGateSubsystem;
 
 public class Shoot extends CommandBase {
-    private BoosterSubsystem booster;
+    private BackGateSubsystem topGate;
 
-    public Shoot(BoosterSubsystem _booster) {
-        booster = _booster;
-        addRequirements(booster);
+    public Shoot(BackGateSubsystem _topGate) {
+        topGate = _topGate;
+        addRequirements(topGate);
     }
 
     @Override
-    public void execute() {
-        double boosterSpeed = SmartDashboard.getNumber("Booster Target RPM", 1000);
-        booster.setBoosterSpeed(boosterSpeed);
+    public void initialize() {
+        topGate.backGateRetract();
     }
 
     @Override
     public void end(boolean interrupted) {
-        booster.stopBooster();
+        topGate.backGateExtend();
     }
 
 }

@@ -28,6 +28,7 @@ import frc.team5406.robot.commands.GateBottomClose;
 import frc.team5406.robot.commands.GateBottomOpen;
 import frc.team5406.robot.commands.GateTopClose;
 import frc.team5406.robot.commands.GateTopOpen;
+import frc.team5406.robot.commands.HighLob;
 import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
@@ -36,6 +37,7 @@ import frc.team5406.robot.commands.IntakeDeployCommand;
 import frc.team5406.robot.commands.ManualSetShooter;
 import frc.team5406.robot.commands.OuttakeCommand;
 import frc.team5406.robot.commands.OuttakeLowerCommand;
+import frc.team5406.robot.commands.RejectLowLob;
 import frc.team5406.robot.commands.ResetHoodEncoder;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
@@ -103,11 +105,14 @@ public class RobotContainer {
     
     m_swerve.setDefaultCommand(new DefaultDriveCommand(
             m_swerve,
+            () -> modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
             () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
-            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
             () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_ANGULAR_SPEED,
             () -> driverGamepad.getRightBumper()
     ));
+
+    m_backGate.setDefaultCommand(new GateTopClose(m_backGate));
+    m_frontGate.setDefaultCommand(new GateBottomOpen(m_frontGate));
 
         // Add commands to the autonomous command chooser
         m_chooser.setDefaultOption("Drive Straight Auto", driveStraight.getAutonomousCommand());
@@ -128,45 +133,44 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //Intake
     driverLeftTrigger.whileActiveContinuous(
-      new IntakeCommand(m_intake, m_feeder, m_backGate, m_frontGate)
+        new IntakeDeployCommand(m_intake)
+    );
+
+    driverLeftTrigger.or(
+      driverXButton
+    ).or(
+      driverBButton
+    ).whileActiveContinuous(
+      new FeedInCommand(m_feeder)
     );
 
     //Reject lower ball
     driverAButton.whileActiveContinuous(
-      new OuttakeCommand(m_intake, m_feeder, m_backGate, m_frontGate)
+      new OuttakeLowerCommand(m_intake, m_feeder, m_frontGate)
     );
 
-    //FIXME - How to shoot and intake at the same time - feeder conflict
     //Shoot
     driverBButton.whileActiveContinuous(
-      new ParallelCommandGroup(
-        new GateTopOpen(m_backGate),
-        new Shoot(m_booster)
-      )
+        new Shoot(m_backGate)
     );
 
     driverXButton.whileActiveContinuous(
-      new ManualSetShooter(m_flywheel, m_hood, Constants.FLYWHEEL_SPEED_LOW_LOB, Constants.HOOD_ANGLE_LOW_LOB)
+        new RejectLowLob(m_flywheel, m_hood, m_booster, m_backGate, m_frontGate)
     );
     
     driverYButton.whileActiveContinuous(
-      new ManualSetShooter(m_flywheel, m_hood, Constants.FLYWHEEL_SPEED_FENDER_HIGH, Constants.HOOD_ANGLE_FENDER_HIGH)
+        new HighLob(m_flywheel, m_hood, m_booster)
     );
 
     driverRightTrigger.whileActiveContinuous(
       new ParallelCommandGroup(
-        new SetShooter(m_flywheel, m_hood, m_limelight),
-        new AlignWithLimelight(m_swerve, m_limelight)
-      )
+        new SetShooter(m_flywheel, m_hood, m_booster, m_limelight),
+        new DriveWithLimelight(m_swerve, m_limelight,
+        () -> modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
+        () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED
+      ) )
     );
 
-
-
-    driverLeftBumper.whileActiveContinuous(
-      new DriveWithLimelight(m_swerve, m_limelight,
-      () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
-      () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED
-    ));
 
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);

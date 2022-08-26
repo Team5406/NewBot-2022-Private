@@ -17,10 +17,16 @@ import frc.team5406.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
 
-    private final Translation2d m_frontLeftLocation = new Translation2d(0.22, 0.22);
+   /* private final Translation2d m_frontLeftLocation = new Translation2d(0.22, 0.22);
     private final Translation2d m_frontRightLocation = new Translation2d(0.22, -0.22);
     private final Translation2d m_backLeftLocation = new Translation2d(-0.22, 0.22);
-    private final Translation2d m_backRightLocation = new Translation2d(-0.22, -0.22);
+    private final Translation2d m_backRightLocation = new Translation2d(-0.22, -0.22);*/
+
+
+    private final Translation2d m_frontLeftLocation = new Translation2d(-0.22, 0.22);
+    private final Translation2d m_frontRightLocation = new Translation2d(0.22, 0.22);
+    private final Translation2d m_backLeftLocation = new Translation2d(-0.22, -0.22);
+    private final Translation2d m_backRightLocation = new Translation2d(0.22, -0.22);
 
     private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
             Constants.FRONT_LEFT_MODULE_STEER_MOTOR, Constants.FRONT_LEFT_MODULE_STEER_ENCODER);

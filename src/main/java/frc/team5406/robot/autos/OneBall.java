@@ -105,14 +105,13 @@ public class OneBall {
                         new FeedInCommand(feeder),
                     new ParallelDeadlineGroup(
                             new AlignWithLimelight(drive, limelight),
-                            new SetShooter(flywheel, hood, limelight)
+                            new SetShooter(flywheel, hood, booster, limelight)
                     ),
-                    new GateTopOpen(backGate),
-                    new ParallelRaceGroup(
-                            new WaitCommand(1),
-                            new Shoot(booster)
-                    ),
-                        new SwerveControllerCommand(
+                    new ParallelDeadlineGroup(
+                        new WaitCommand(1),  
+                        new Shoot(backGate)
+                ),
+                new SwerveControllerCommand(
                             exampleTrajectory,
                             drive::getPose,
                             drive.m_kinematics,

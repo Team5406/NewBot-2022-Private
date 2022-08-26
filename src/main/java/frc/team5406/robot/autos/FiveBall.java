@@ -168,19 +168,17 @@ public class FiveBall {
                                         drive::setModuleStates,
                                         drive)
                                         .andThen(() -> drive.drive(0, 0, 0, false)),
-                                        new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                                        new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ),
                         new TurnToAngle(-4, drive),
                         new ParallelDeadlineGroup(
                                 new AlignWithLimelight(drive, limelight),
-                                new SetShooter(flywheel, hood, limelight)
+                                new SetShooter(flywheel, hood, booster, limelight)
                         ),
-                        new GateTopOpen(backGate),
-                        new ParallelRaceGroup(
-                                new WaitCommand(1),
-                                new Shoot(booster)
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1),  
+                                new Shoot(backGate)
                         ),
-                        new GateTopClose(backGate),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
                                         path2,
@@ -193,17 +191,16 @@ public class FiveBall {
                                         drive::setModuleStates,
                                         drive)
                                         .andThen(() -> drive.drive(0, 0, 0, false)), 
-                                new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                                new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ), 
                         new TurnToAngle(-40, drive),
                         new ParallelDeadlineGroup(
                                 new AlignWithLimelight(drive, limelight),
-                                new SetShooter(flywheel, hood, limelight)
+                                new SetShooter(flywheel, hood, booster, limelight)
                         ),
-                        new GateTopOpen(backGate),
-                        new ParallelRaceGroup(
-                                new WaitCommand(1),
-                                new Shoot(booster)
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1),  
+                                new Shoot(backGate)
                         ),
                         new GateTopClose(backGate),
                         new SwerveControllerCommand(
@@ -230,17 +227,16 @@ public class FiveBall {
                                         drive::setModuleStates,
                                         drive)
                                         .andThen(() -> drive.drive(0, 0, 0, false)), 
-                                new ManualSetShooter(flywheel, hood, 2344, 15.6)
+                                new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ),
                         new TurnToAngle(-57, drive),
                         new ParallelDeadlineGroup(
                                 new AlignWithLimelight(drive, limelight),
-                                new SetShooter(flywheel, hood, limelight)
+                                new SetShooter(flywheel, hood, booster, limelight)
                         ),
-                        new GateTopOpen(backGate),
-                        new ParallelRaceGroup(
-                                new WaitCommand(1),
-                                new Shoot(booster)
+                        new ParallelDeadlineGroup(
+                                new WaitCommand(1),  
+                                new Shoot(backGate)
                         )
                 ),
                 new FeedInCommand(feeder)

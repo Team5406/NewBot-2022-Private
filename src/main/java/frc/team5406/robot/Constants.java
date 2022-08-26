@@ -23,22 +23,22 @@ public final class Constants {
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 3;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 4;
-    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 34;
+    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 31;
    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(96.855);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 5;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6;
-    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 32;
+    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 34;
    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(178.42);
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 2;
-    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 31;
+    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 33;
    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(358.95);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 7;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 8;
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 33;
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 32;
    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(0);
 
     public static final int MOTOR_INTAKE_ROLLERS_ONE = 18; // SparkMax, NEO
@@ -248,5 +248,7 @@ public final class Constants {
     public static final double HOOD_PID1_I = 0;
     public static final double HOOD_PID1_D = 0.1;
     public static final double HOOD_PID1_F = 3e-3;
+
+    public static final double BOOSTER_SPEED = 1000;
     
 }
