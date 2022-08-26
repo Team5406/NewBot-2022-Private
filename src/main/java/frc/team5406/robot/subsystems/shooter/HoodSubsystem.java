@@ -22,6 +22,14 @@ public class HoodSubsystem extends SubsystemBase {
         hoodEncoder = hood.getEncoder();
         hoodPID = hood.getPIDController();
 
+        hoodPID.setP(Constants.HOOD_PID1_P, 1);
+        hoodPID.setI(Constants.HOOD_PID1_I, 1);
+        hoodPID.setD(Constants.HOOD_PID1_D, 1);
+        hoodPID.setIZone(0, 1);
+        hoodPID.setFF(Constants.HOOD_PID1_F, 1);
+        hoodPID.setOutputRange(Constants.OUTPUT_RANGE_MIN, Constants.OUTPUT_RANGE_MAX, 1);
+        hoodPID.setSmartMotionAllowedClosedLoopError(0.05, 1);
+
         hood.setSmartCurrentLimit(Constants.CURRENT_LIMIT_HOOD);
         hood.setInverted(true);
 

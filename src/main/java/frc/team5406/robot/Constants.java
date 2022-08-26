@@ -55,8 +55,8 @@ public final class Constants {
     //public static final int MOTOR_CLIMBER_TWO = 17; // SparkMax, NEO
 
     // PH Ports
-    public static final int CYLINDER_FEEDER_GATE_TOP_ONE = 5; 
-    public static final int CYLINDER_FEEDER_GATE_BOTTOM_ONE = 6;
+    public static final int CYLINDER_FEEDER_GATE_TOP_ONE = 6; 
+    public static final int CYLINDER_FEEDER_GATE_BOTTOM_ONE = 5;
     public static final int CYLINDER_INTAKE_PIVOT_ONE = 7;
 
     public static final double MAXIMUM_VOLTAGE = 12.0;
@@ -74,23 +74,23 @@ public final class Constants {
     public static final double ROTATION_PID0_D = 0.1;
     public static final double ROTATION_PID0_F = 0.00156;
 
-    public static final double CONVEYOR_BOTTOM_PID1_P = 8.7729E-5;
+    public static final double CONVEYOR_BOTTOM_PID1_P = 4.5776E-10;
     public static final double CONVEYOR_BOTTOM_PID1_I = 0;
     public static final double CONVEYOR_BOTTOM_PID1_D = 0;
     public static final double CONVEYOR_BOTTOM_PID1_F = 1.5e-5;
 
-    public static final double CONVEYOR_BOTTOM_KS = 0.22569;
-    public static final double CONVEYOR_BOTTOM_KV = 0.25313;
-    public static final double CONVEYOR_BOTTOM_KA = 0.0068695;
+    public static final double CONVEYOR_BOTTOM_KS = 0.1652;
+    public static final double CONVEYOR_BOTTOM_KV = 0.48782;
+    public static final double CONVEYOR_BOTTOM_KA = 0.019205;
 
-    public static final double CONVEYOR_TOP_PID1_P = 2.7764E-14;
+    public static final double CONVEYOR_TOP_PID1_P = 2.2382E-09;
     public static final double CONVEYOR_TOP_PID1_I = 0;
     public static final double CONVEYOR_TOP_PID1_D = 0;
     public static final double CONVEYOR_TOP_PID1_F = 1.5e-5;
 
-    public static final double CONVEYOR_TOP_KS = 0.16838;
-    public static final double CONVEYOR_TOP_KV = 0.24884;
-    public static final double CONVEYOR_TOP_KA = 0.0043763;
+    public static final double CONVEYOR_TOP_KS = 0.14207;
+    public static final double CONVEYOR_TOP_KV = 0.49344;
+    public static final double CONVEYOR_TOP_KA = 0.024371;
 
     public static final double ROTATION_PID0_MAX_ACCEL = 5700; // RPM
     public static final double ROTATION_PID0_MAX_VELOCITY = 3000;
@@ -118,7 +118,7 @@ public final class Constants {
     public static final boolean DRIVE_MOTOR_INVERSION = true;
     public static final boolean ROTATION_MOTOR_INVERSION = false;
     public static final boolean CONVEYOR_TOP_MOTOR_INVERSION = false;
-    public static final boolean CONVEYOR_BOTTOM_MOTOR_INVERSION = false;
+    public static final boolean CONVEYOR_BOTTOM_MOTOR_INVERSION = true;
 
     public static final int SECONDS_PER_MINUTE = 60;
 
@@ -130,8 +130,8 @@ public final class Constants {
     //public static final double GEAR_RATIO_FEEDER_TOP = 5.0 / 1.0; //FIXME
     //public static final double GEAR_RATIO_FEEDER_BOTTOM = 5.0 / 1.0; //FIX ME
     //public static final double GEAR_RATIO_INTAKE_ROLLERS = 2.0 / 1.0; // Overdriven, 2020 bot
-    public static final double GEAR_RATIO_CONVEYOR_BOTTOM = 1.0 / 1.0; // Direct Drive
-    public static final double GEAR_RATIO_CONVEYOR_TOP = 1.0 / 1.0; // Direct Drive
+    public static final double GEAR_RATIO_CONVEYOR_BOTTOM = 4.0 / 1.0; // Direct Drive
+    public static final double GEAR_RATIO_CONVEYOR_TOP = 4.0 / 1.0; // Direct Drive
     //public static final double GEAR_RATIO_CLIMBER = 320.0 / 1.0; // Overdriven, 2020 bot
     public static final double GEAR_RATIO_SHOOTER = 4.0 / 3.0;
     public static final double GEAR_RATIO_BOOSTER = 2.0 / 1.0;
@@ -225,5 +225,28 @@ public final class Constants {
 
     public static final double HOOD_ANGLE_LOW_LOB = 20;
     public static final double FLYWHEEL_SPEED_LOW_LOB = 1000;
+
+    public static final double SHOOTER_KS = 0.35321;
+    public static final double SHOOTER_KV = 0.13604;
+    public static final double SHOOTER_KA = 0.0109;
+
+    public static final double BOOSTER_KS = 0.76732;
+    public static final double BOOSTER_KV = 0.066627;
+    public static final double BOOSTER_KA = 0.16846;
+
+    public static final double SHOOTER_PID0_P = 6.1481E-12;
+    public static final double SHOOTER_PID0_I = 0;
+    public static final double SHOOTER_PID0_D = 0;
+    public static final double SHOOTER_PID0_F = 0.0000156;
+
+    public static final double BOOSTER_PID0_P = 2.0619E-07;
+    public static final double BOOSTER_PID0_D = 0;
+    public static final double BOOSTER_PID0_I = 0;
+    public static final double BOOSTER_PID0_F = 0.0000156;
+
+    public static final double HOOD_PID1_P = 1E-00; //position
+    public static final double HOOD_PID1_I = 0;
+    public static final double HOOD_PID1_D = 0.1;
+    public static final double HOOD_PID1_F = 3e-3;
     
 }

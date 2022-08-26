@@ -19,7 +19,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private HoodSubsystem hood = new HoodSubsystem();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -51,7 +50,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    hood.hoodReset = false;
+   // hood.hoodReset = false;  //FIXME
   }
 
   @Override

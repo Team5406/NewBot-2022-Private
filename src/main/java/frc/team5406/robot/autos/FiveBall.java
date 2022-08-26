@@ -2,10 +2,15 @@ package frc.team5406.robot.autos;
 
 import frc.team5406.robot.Constants;
 import frc.team5406.robot.commands.AlignWithLimelight;
-import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.FeedInCommand;
+import frc.team5406.robot.commands.GateBottomOpen;
+import frc.team5406.robot.commands.GateTopClose;
+import frc.team5406.robot.commands.GateTopOpen;
+import frc.team5406.robot.commands.IntakeDeployCommand;
 import frc.team5406.robot.commands.ManualSetShooter;
 import frc.team5406.robot.commands.ResetHoodEncoder;
 import frc.team5406.robot.commands.SetShooter;
+import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.commands.TurnToAngle;
 
@@ -147,7 +152,10 @@ public class FiveBall {
                 new SequentialCommandGroup(
                         new ParallelRaceGroup(
                                 new WaitCommand(1.5),
-                                new ResetHoodEncoder(hood)
+                                new ResetHoodEncoder(hood),
+                                new IntakeDeployCommand(intake),
+                                new GateBottomOpen(frontGate),
+                                new GateTopClose(backGate)
                         ),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
@@ -167,10 +175,12 @@ public class FiveBall {
                                 new AlignWithLimelight(drive, limelight),
                                 new SetShooter(flywheel, hood, limelight)
                         ),
+                        new GateTopOpen(backGate),
                         new ParallelRaceGroup(
                                 new WaitCommand(1),
-                                new Shoot(booster, feeder)
+                                new Shoot(booster)
                         ),
+                        new GateTopClose(backGate),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
                                         path2,
@@ -190,10 +200,12 @@ public class FiveBall {
                                 new AlignWithLimelight(drive, limelight),
                                 new SetShooter(flywheel, hood, limelight)
                         ),
+                        new GateTopOpen(backGate),
                         new ParallelRaceGroup(
                                 new WaitCommand(1),
-                                new Shoot(booster, feeder)
+                                new Shoot(booster)
                         ),
+                        new GateTopClose(backGate),
                         new SwerveControllerCommand(
                             path3,
                             drive::getPose,
@@ -225,12 +237,13 @@ public class FiveBall {
                                 new AlignWithLimelight(drive, limelight),
                                 new SetShooter(flywheel, hood, limelight)
                         ),
+                        new GateTopOpen(backGate),
                         new ParallelRaceGroup(
                                 new WaitCommand(1),
-                                new Shoot(booster, feeder)
+                                new Shoot(booster)
                         )
                 ),
-                new IntakeCommand(intake, feeder, backGate, frontGate)
+                new FeedInCommand(feeder)
         );
 
 

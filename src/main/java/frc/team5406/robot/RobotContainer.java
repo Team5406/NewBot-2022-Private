@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.team5406.robot.autos.DriveStraight;
@@ -21,11 +22,19 @@ import frc.team5406.robot.autos.TwoBall;
 import frc.team5406.robot.commands.DefaultDriveCommand;
 import frc.team5406.robot.commands.AlignWithLimelight;
 import frc.team5406.robot.commands.DriveWithLimelight;
+import frc.team5406.robot.commands.FeedInCommand;
+import frc.team5406.robot.commands.FeedOutCommand;
+import frc.team5406.robot.commands.GateBottomClose;
+import frc.team5406.robot.commands.GateBottomOpen;
+import frc.team5406.robot.commands.GateTopClose;
+import frc.team5406.robot.commands.GateTopOpen;
+import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
-import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.IntakeDeployCommand;
 import frc.team5406.robot.commands.ManualSetShooter;
+import frc.team5406.robot.commands.OuttakeCommand;
 import frc.team5406.robot.commands.OuttakeLowerCommand;
 import frc.team5406.robot.commands.ResetHoodEncoder;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
@@ -39,6 +48,7 @@ import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
 import frc.team5406.robot.triggers.JoystickMoved;
 import frc.team5406.robot.triggers.ResetHood;
 import frc.team5406.robot.triggers.TriggerPressed;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -59,28 +69,17 @@ public class RobotContainer {
   LimelightSubsystem m_limelight = new LimelightSubsystem();
 
   // The driver's controller
-  XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
   XboxController driverGamepad = new XboxController(Constants.DRIVER_CONTROLLER);
 
   Trigger driverLeftTrigger = new TriggerPressed(driverGamepad::getLeftTriggerAxis);
   Trigger driverRightTrigger = new TriggerPressed(driverGamepad::getRightTriggerAxis);
-  Trigger operatorLeftTrigger = new TriggerPressed(operatorGamepad::getLeftTriggerAxis);
-  Trigger operatorRightTrigger = new TriggerPressed(operatorGamepad::getRightTriggerAxis);
-  Trigger operatorJoystickRight = new JoystickMoved(operatorGamepad::getRightY);
   Trigger resetHoodTrigger = new ResetHood(m_hood);
 
-  JoystickButton operatorLeftBumper = new JoystickButton(operatorGamepad, Button.kLeftBumper.value);
-  JoystickButton operatorRightModifier = new JoystickButton(operatorGamepad, Button.kStart.value);
-  JoystickButton operatorLeftModifier = new JoystickButton(operatorGamepad, Button.kBack.value);
   JoystickButton driverRightModifier = new JoystickButton(driverGamepad, Button.kStart.value);
   JoystickButton driverLeftModifier = new JoystickButton(driverGamepad, Button.kBack.value);
   JoystickButton driverRightJoystickButton = new JoystickButton(driverGamepad, Button.kRightStick.value);
   JoystickButton driverLeftJoystickButton = new JoystickButton(driverGamepad, Button.kLeftStick.value);
-  JoystickButton operatorRightBumper = new JoystickButton(operatorGamepad, Button.kRightBumper.value);
-  JoystickButton operatorYButton = new JoystickButton(operatorGamepad, Button.kY.value);
-  JoystickButton operatorAButton = new JoystickButton(operatorGamepad, Button.kA.value);
-  JoystickButton operatorBButton = new JoystickButton(operatorGamepad, Button.kB.value);
-  JoystickButton driverXButton = new JoystickButton(operatorGamepad, Button.kX.value);
+  JoystickButton driverXButton = new JoystickButton(driverGamepad, Button.kX.value);
   JoystickButton driverAButton = new JoystickButton(driverGamepad, Button.kA.value);
   JoystickButton driverBButton = new JoystickButton(driverGamepad, Button.kB.value);
   JoystickButton driverYButton = new JoystickButton(driverGamepad, Button.kY.value);
@@ -127,16 +126,23 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    //Intake
     driverLeftTrigger.whileActiveContinuous(
       new IntakeCommand(m_intake, m_feeder, m_backGate, m_frontGate)
     );
 
+    //Reject lower ball
     driverAButton.whileActiveContinuous(
-      new OuttakeLowerCommand(m_intake, m_feeder, m_backGate, m_frontGate)
+      new OuttakeCommand(m_intake, m_feeder, m_backGate, m_frontGate)
     );
 
+    //FIXME - How to shoot and intake at the same time - feeder conflict
+    //Shoot
     driverBButton.whileActiveContinuous(
-      new Shoot(m_booster, m_feeder)
+      new ParallelCommandGroup(
+        new GateTopOpen(m_backGate),
+        new Shoot(m_booster)
+      )
     );
 
     driverXButton.whileActiveContinuous(

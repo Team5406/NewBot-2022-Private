@@ -2,10 +2,15 @@ package frc.team5406.robot.autos;
 
 import frc.team5406.robot.Constants;
 import frc.team5406.robot.commands.AlignWithLimelight;
-import frc.team5406.robot.commands.IntakeCommand;
+import frc.team5406.robot.commands.FeedInCommand;
+import frc.team5406.robot.commands.GateBottomOpen;
+import frc.team5406.robot.commands.GateTopClose;
+import frc.team5406.robot.commands.GateTopOpen;
+import frc.team5406.robot.commands.IntakeDeployCommand;
 import frc.team5406.robot.commands.ManualSetShooter;
 import frc.team5406.robot.commands.ResetHoodEncoder;
 import frc.team5406.robot.commands.SetShooter;
+import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.commands.Shoot;
 
 import java.util.List;
@@ -19,6 +24,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -96,7 +102,10 @@ public class TwoBall {
                 new SequentialCommandGroup(
                         new ParallelDeadlineGroup(
                                 new WaitCommand(2),
-                                new ResetHoodEncoder(hood)
+                                new ResetHoodEncoder(hood),
+                                new IntakeDeployCommand(intake),
+                                new GateBottomOpen(frontGate),
+                                new GateTopClose(backGate)
                         ),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
@@ -118,9 +127,11 @@ public class TwoBall {
                                     new SetShooter(flywheel, hood, limelight)
                                 )
                         ),
-                new Shoot(booster, feeder)
+                new Shoot(booster),
+                new GateTopOpen(backGate)
 
-                ), new IntakeCommand(intake, feeder, backGate, frontGate)
+                ), new FeedInCommand(feeder)
+        
         );
 
     }

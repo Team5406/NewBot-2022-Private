@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +22,9 @@ public class FeederSubsystem extends SubsystemBase {
   private SparkMaxPIDController conveyorTopPID, conveyorBottomPID;
 
   private Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+
+  static SimpleMotorFeedforward conveyorBottomFF = new SimpleMotorFeedforward(Constants.CONVEYOR_BOTTOM_KS, Constants.CONVEYOR_BOTTOM_KV, Constants.CONVEYOR_BOTTOM_KA);
+  static SimpleMotorFeedforward conveyorTopFF = new SimpleMotorFeedforward(Constants.CONVEYOR_TOP_KS, Constants.CONVEYOR_TOP_KV, Constants.CONVEYOR_TOP_KA);
 
   public void setupMotors() {
     conveyorTop.restoreFactoryDefaults();
@@ -86,7 +90,8 @@ public class FeederSubsystem extends SubsystemBase {
 
     } else {
       // double arbFF = shooterFF.calculate(RPM/Constants.SECONDS_PER_MINUTE);
-      conveyorTopPID.setReference(RPM * Constants.GEAR_RATIO_CONVEYOR_TOP, ControlType.kVelocity, 1);
+      double arbFF = conveyorTopFF.calculate(RPM/Constants.SECONDS_PER_MINUTE);
+      conveyorTopPID.setReference(RPM * Constants.GEAR_RATIO_CONVEYOR_TOP, ControlType.kVelocity, 0, arbFF, SparkMaxPIDController.ArbFFUnits.kVoltage);
     }
 
   }
@@ -97,7 +102,8 @@ public class FeederSubsystem extends SubsystemBase {
       stopConveyorBottom();
     } else {
       // double arbFF = shooterFF.calculate(RPM/Constants.SECONDS_PER_MINUTE);
-      conveyorBottomPID.setReference(RPM * Constants.GEAR_RATIO_CONVEYOR_BOTTOM, ControlType.kVelocity, 1);
+      double arbFF = conveyorBottomFF.calculate(RPM/Constants.SECONDS_PER_MINUTE);
+      conveyorBottomPID.setReference(RPM * Constants.GEAR_RATIO_CONVEYOR_BOTTOM, ControlType.kVelocity, 0, arbFF, SparkMaxPIDController.ArbFFUnits.kVoltage);
     }
   }
 
