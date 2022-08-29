@@ -102,13 +102,13 @@ public class OneBall {
                                 new GateTopClose(backGate)
                         ),
                         new AlignWithLimelight(drive, limelight),
-                        new FeedInCommand(feeder),
                     new ParallelDeadlineGroup(
                             new AlignWithLimelight(drive, limelight),
                             new SetShooter(flywheel, hood, booster, limelight)
                     ),
                     new ParallelDeadlineGroup(
-                        new WaitCommand(1),  
+                        new WaitCommand(1), 
+                        new FeedInCommand(feeder), 
                         new Shoot(backGate)
                 ),
                 new SwerveControllerCommand(

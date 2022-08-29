@@ -69,9 +69,9 @@ public final class Constants {
     public static final double DRIVE_PID0_D = 0;
     public static final double DRIVE_PID0_F = 0.00156;
 
-    public static final double ROTATION_PID0_P = 0.5;
+    public static final double ROTATION_PID0_P = 1.5;
     public static final double ROTATION_PID0_I = 0.0;
-    public static final double ROTATION_PID0_D = 0.1;
+    public static final double ROTATION_PID0_D = 0;
     public static final double ROTATION_PID0_F = 0.00156;
 
     public static final double CONVEYOR_BOTTOM_PID1_P = 4.5776E-10;
@@ -142,7 +142,7 @@ public final class Constants {
     public static final int CURRENT_LIMIT_DRIVE_MOTOR = 40;
     public static final int CURRENT_LIMIT_ROTATION_MOTOR = 40;
     public static final int CURRENT_LIMIT_SHOOTER_WHEEL = 60;
-    public static final int CURRENT_LIMIT_BOOSTER = 20;
+    public static final int CURRENT_LIMIT_BOOSTER = 30;
     public static final int CURRENT_LIMIT_TURRET_AZIMUTH = 20;
     public static final int CURRENT_LIMIT_HOOD = 20;
     //public static final int CURRENT_LIMIT_FEEDER_TOP = 40;
@@ -177,8 +177,8 @@ public final class Constants {
     public static final int HOOD_MAX_LIMIT = 22;
     public static final int HOOD_MIN_LIMIT = 0;
 
-    public static final int CONVEYOR_INTAKE_SPEED_TOP = 1000;
-    public static final int CONVEYOR_INTAKE_SPEED_BOTTOM = 1000;
+    public static final int CONVEYOR_INTAKE_SPEED_TOP = 2000;
+    public static final int CONVEYOR_INTAKE_SPEED_BOTTOM = 2000;
     public static final int CONVEYOR_OUTTAKE_SPEED_TOP = -500;
     public static final int CONVEYOR_OUTTAKE_SPEED_BOTTOM = -500;
     public static final int SHOOTER_MAX_SPEED = 4000; //RPM
@@ -202,15 +202,15 @@ public final class Constants {
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
+    public static final double kPThetaController = 0.5;
 
-    public static final double TURN_P = 0.1;
+    public static final double TURN_P = 0.5;
     public static final double TURN_I = 0;
-    public static final double TURN_D = 0;
+    public static final double TURN_D = 0.05;
     public static final double TURN_TOLERANCE = 2; //degrees 
     public static final double TURN_RATE_TOLERANCE = 5; //degrees per second
 
-    public static final double LL_TURN_P = 0.15;
+    public static final double LL_TURN_P = 0.2;
     public static final double LL_TURN_I = 0;
     public static final double LL_TURN_D = 0;
     public static final double LL_TURN_TOLERANCE = 2; //degrees 
@@ -239,16 +239,16 @@ public final class Constants {
     public static final double SHOOTER_PID0_D = 0;
     public static final double SHOOTER_PID0_F = 0.0000156;
 
-    public static final double BOOSTER_PID0_P = 2.0619E-07;
+    public static final double BOOSTER_PID0_P = 2.0619E-06;
     public static final double BOOSTER_PID0_D = 0;
     public static final double BOOSTER_PID0_I = 0;
-    public static final double BOOSTER_PID0_F = 0.0000156;
+    public static final double BOOSTER_PID0_F = 0.00156;
 
     public static final double HOOD_PID1_P = 1E-00; //position
     public static final double HOOD_PID1_I = 0;
     public static final double HOOD_PID1_D = 0.1;
     public static final double HOOD_PID1_F = 3e-3;
 
-    public static final double BOOSTER_SPEED = 1000;
+    public static final double BOOSTER_SPEED = 300;
     
 }

@@ -46,7 +46,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public double calculateHoodAngle(double ty) {
         double hoodAngle = 2e-05 * Math.pow(ty, 4) - 0.0002 * Math.pow(ty, 3) - 0.0144 * Math.pow(ty, 2) - 0.4064 * ty
-                + 14.482;
+                + 14.482 -2;
 
         if (hoodAngle > Constants.HOOD_MAX_LIMIT) {
             hoodAngle = Constants.HOOD_MAX_LIMIT;
@@ -80,7 +80,7 @@ public class LimelightSubsystem extends SubsystemBase {
         if (shooterSpeed < 0) {
             shooterSpeed = 0;
         }
-        return shooterSpeed;
+        return 1.02*shooterSpeed;
     }
 
     public boolean LLHasValidTarget() {

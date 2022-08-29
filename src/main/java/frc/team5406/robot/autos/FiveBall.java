@@ -27,6 +27,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -94,7 +95,7 @@ public class FiveBall {
                 List.of(
 
                 ),
-                new Pose2d(0, Units.inchesToMeters(36), new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(0, Units.inchesToMeters(40), new Rotation2d(Units.degreesToRadians(90))),
                 fwdConfig);
 
 
@@ -104,11 +105,11 @@ public class FiveBall {
 
 
         Trajectory path2 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(0, Units.inchesToMeters(36), new Rotation2d(Units.degreesToRadians(315))),
+                new Pose2d(0, Units.inchesToMeters(40), new Rotation2d(Units.degreesToRadians(315))),
                 List.of(
 
                 ),
-                new Pose2d(Units.inchesToMeters(84), Units.inchesToMeters(-4), new Rotation2d(Units.degreesToRadians(315))),
+                new Pose2d(Units.inchesToMeters(95), Units.inchesToMeters(-20), new Rotation2d(Units.degreesToRadians(350))),
                 fwdConfig);
 
 
@@ -118,11 +119,11 @@ public class FiveBall {
 
 
         Trajectory path3 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(Units.inchesToMeters(84), Units.inchesToMeters(-4), new Rotation2d(Units.degreesToRadians(15))),
+                new Pose2d(Units.inchesToMeters(95), Units.inchesToMeters(-20), new Rotation2d(Units.degreesToRadians(15))),
                 List.of(
 
                 ),
-                new Pose2d(Units.inchesToMeters(233), Units.inchesToMeters(10), new Rotation2d(Units.degreesToRadians(15))),
+                new Pose2d(Units.inchesToMeters(262), Units.inchesToMeters(4), new Rotation2d(Units.degreesToRadians(15))),
                 fwdConfig);
 
 
@@ -132,7 +133,7 @@ public class FiveBall {
 
 
         Trajectory path4 = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(Units.inchesToMeters(233), Units.inchesToMeters(10), new Rotation2d(Units.degreesToRadians(200))),
+                new Pose2d(Units.inchesToMeters(262), Units.inchesToMeters(4), new Rotation2d(Units.degreesToRadians(200))),
                 List.of(
 
                 ),
@@ -146,16 +147,18 @@ public class FiveBall {
         
 
         drive.setPosition(path1.getInitialPose());
-
+        double startTime;
 
         return new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
                         new ParallelRaceGroup(
                                 new WaitCommand(1.5),
-                                new ResetHoodEncoder(hood),
-                                new IntakeDeployCommand(intake),
-                                new GateBottomOpen(frontGate),
-                                new GateTopClose(backGate)
+                                new ParallelDeadlineGroup(
+                                        new ResetHoodEncoder(hood),
+                                        new IntakeDeployCommand(intake),
+                                        new GateBottomOpen(frontGate),
+                                        new GateTopClose(backGate)
+                                )    
                         ),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
@@ -165,12 +168,13 @@ public class FiveBall {
                                         new PIDController(Constants.kPXController, 0, 0),
                                         new PIDController(Constants.kPYController, 0, 0),
                                         thetaController,
+                                       //  () -> drive.desiredRotation(80, 80, Timer.getFPGATimestamp(), path1.getTotalTimeSeconds()),
                                         drive::setModuleStates,
                                         drive)
                                         .andThen(() -> drive.drive(0, 0, 0, false)),
                                         new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ),
-                        new TurnToAngle(-4, drive),
+                        //new TurnToAngle(-4, drive),
                         new ParallelDeadlineGroup(
                                 new AlignWithLimelight(drive, limelight),
                                 new SetShooter(flywheel, hood, booster, limelight)
@@ -187,13 +191,13 @@ public class FiveBall {
                                         new PIDController(Constants.kPXController, 0, 0),
                                         new PIDController(Constants.kPYController, 0, 0),
                                          thetaController2,
-                                        () -> drive.desiredRotation(4, 90, Timer.getFPGATimestamp(), path2.getTotalTimeSeconds()),
+                                        () -> drive.desiredRotation(30, 30, Timer.getFPGATimestamp(), path2.getTotalTimeSeconds()),
                                         drive::setModuleStates,
                                         drive)
                                         .andThen(() -> drive.drive(0, 0, 0, false)), 
                                 new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ), 
-                        new TurnToAngle(-40, drive),
+                        //new TurnToAngle(-50, drive),
                         new ParallelDeadlineGroup(
                                 new AlignWithLimelight(drive, limelight),
                                 new SetShooter(flywheel, hood, booster, limelight)
@@ -210,7 +214,7 @@ public class FiveBall {
                             new PIDController(Constants.kPXController, 0, 0),
                             new PIDController(Constants.kPYController, 0, 0),
                             thetaController3,
-                            () -> drive.desiredRotation(40, 45, Timer.getFPGATimestamp(), path3.getTotalTimeSeconds()),
+                            () -> drive.desiredRotation(40, 40, Timer.getFPGATimestamp(), path3.getTotalTimeSeconds()),
                             drive::setModuleStates,
                             drive)
                             .andThen(() -> drive.drive(0, 0, 0, false)),
@@ -223,13 +227,13 @@ public class FiveBall {
                                         new PIDController(Constants.kPXController, 0, 0),
                                         new PIDController(Constants.kPYController, 0, 0),
                                         thetaController4,
-                                        () -> drive.desiredRotation(45, 57, Timer.getFPGATimestamp(), path4.getTotalTimeSeconds()),
+                                        () -> drive.desiredRotation(40, 40, Timer.getFPGATimestamp(), path4.getTotalTimeSeconds()),
                                         drive::setModuleStates,
                                         drive)
                                         .andThen(() -> drive.drive(0, 0, 0, false)), 
                                 new ManualSetShooter(flywheel, hood, booster, 2344, 15.6)
                         ),
-                        new TurnToAngle(-57, drive),
+                        //new TurnToAngle(-57, drive),
                         new ParallelDeadlineGroup(
                                 new AlignWithLimelight(drive, limelight),
                                 new SetShooter(flywheel, hood, booster, limelight)

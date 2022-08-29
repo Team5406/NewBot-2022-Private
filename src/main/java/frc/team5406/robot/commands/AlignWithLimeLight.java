@@ -12,6 +12,9 @@ import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 
 /** A command that will turn the robot to the specified angle. */
 public class AlignWithLimelight extends PIDCommand {
+
+  private final DriveSubsystem drive;
+
     //DriveSubsystem drive;
   /**
    * Turns to robot to the specified angle.
@@ -19,8 +22,7 @@ public class AlignWithLimelight extends PIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive The drive subsystem to use
    */
-  public AlignWithLimelight(DriveSubsystem drive, LimelightSubsystem limelight) {
-      //drive = _drive;
+  public AlignWithLimelight(DriveSubsystem _drive, LimelightSubsystem limelight) {
     super(
         new PIDController(Constants.LL_TURN_P, Constants.LL_TURN_I, Constants.LL_TURN_D),
         // Close loop on heading
@@ -28,9 +30,9 @@ public class AlignWithLimelight extends PIDCommand {
         // center limelight on target, tx = 0
         0,
         // Pipe output to turn robot
-        output -> drive.setTurnStates(output),
+        output -> _drive.setTurnStates(output),
         // Require the drive
-        drive);
+        _drive);
 
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
@@ -38,11 +40,21 @@ public class AlignWithLimelight extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(Constants.LL_TURN_TOLERANCE);
+        System.out.println("Align With Limelight - Start");
+        drive = _drive;
+
+
   }
 
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
     return getController().atSetpoint();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+      drive.drive(0, 0, 0, false);
+      System.out.println("Align With Limelight - End");
   }
 }

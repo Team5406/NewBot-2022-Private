@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -105,14 +107,19 @@ public class RobotContainer {
     
     m_swerve.setDefaultCommand(new DefaultDriveCommand(
             m_swerve,
-            () -> modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
             () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
+            () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
             () -> -modifyAxis(driverGamepad.getRightX()) * Constants.K_MAX_ANGULAR_SPEED,
             () -> driverGamepad.getRightBumper()
     ));
 
-    m_backGate.setDefaultCommand(new GateTopClose(m_backGate));
-    m_frontGate.setDefaultCommand(new GateBottomOpen(m_frontGate));
+    m_backGate.setDefaultCommand(new RunCommand(() -> m_backGate.backGateExtend(), m_backGate));
+    m_frontGate.setDefaultCommand(new RunCommand(() -> m_frontGate.frontGateRetract(), m_frontGate));
+
+    m_flywheel.setDefaultCommand(new RunCommand(() -> m_flywheel.stopShooter(), m_flywheel));
+    m_limelight.setDefaultCommand(new RunCommand(() -> m_limelight.turnOffLimelight(), m_limelight));
+    m_booster.setDefaultCommand(new RunCommand(() -> m_booster.stopBooster(), m_booster));
+    m_intake.setDefaultCommand(new RunCommand(() -> m_intake.intakeRetract(), m_intake));
 
         // Add commands to the autonomous command chooser
         m_chooser.setDefaultOption("Drive Straight Auto", driveStraight.getAutonomousCommand());
@@ -166,12 +173,14 @@ public class RobotContainer {
       new ParallelCommandGroup(
         new SetShooter(m_flywheel, m_hood, m_booster, m_limelight),
         new DriveWithLimelight(m_swerve, m_limelight,
-        () -> modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED,
-        () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED
+        () -> -modifyAxis(driverGamepad.getLeftY()) * Constants.K_MAX_SPEED,
+        () -> -modifyAxis(driverGamepad.getLeftX()) * Constants.K_MAX_SPEED
       ) )
     );
 
-
+    driverLeftBumper.whileActiveContinuous(
+      new RunCommand(() -> m_swerve.setSwerveBrake(), m_swerve)
+    );
 
     driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
 

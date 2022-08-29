@@ -22,8 +22,12 @@ public class IntakeDeployCommand extends CommandBase {
     }
 
     @Override
+    public boolean isFinished() {
+      return true;
+    }
+
+    @Override
     public void end(boolean interrupted) {
         System.out.println("Intake Deploy - End");
-        intake.intakeRetract();
     }
 }

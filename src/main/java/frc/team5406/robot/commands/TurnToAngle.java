@@ -37,11 +37,19 @@ public class TurnToAngle extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(Constants.TURN_TOLERANCE);
+        System.out.println("Turn To Angle - Start");
+
   }
 
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
     return getController().atSetpoint();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("Turn To Angle - End");
+
   }
 }

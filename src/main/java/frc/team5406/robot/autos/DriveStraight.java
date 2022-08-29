@@ -51,22 +51,20 @@ public class DriveStraight {
 
                 ),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(0, 1, new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(0, Units.inchesToMeters(108), new Rotation2d(Units.degreesToRadians(90))),
                 config);
 
         var thetaController = new ProfiledPIDController(
                 Constants.kPThetaController, 0, 0, Constants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        double p = SmartDashboard.getNumber("P-drv Gain", 0);
         
         SwerveControllerCommand swerveCommand = new SwerveControllerCommand(
                 exampleTrajectory,
                 drive::getPose,
                 drive.m_kinematics,
                 // Position controllers
-                new PIDController(p, 0, 0),
-                new PIDController(p, 0, 0),
+                new PIDController(Constants.kPXController, 0, 0),
+                new PIDController(Constants.kPYController, 0, 0),
                 thetaController,
                 drive::setModuleStates,
                 drive);

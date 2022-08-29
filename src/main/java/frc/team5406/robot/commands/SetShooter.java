@@ -27,6 +27,8 @@ public class SetShooter extends CommandBase {
     @Override
     public void initialize() {
       limelight.turnOnLimelight();
+      System.out.println("Set Shooter - Start");
+
       
     }
 
@@ -40,9 +42,8 @@ public class SetShooter extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-      flywheel.stopShooter();     
-      limelight.turnOffLimelight();
-      booster.stopBooster();
+      System.out.println("Set Shooter - End");
+
 
     }
 }

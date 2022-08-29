@@ -19,6 +19,11 @@ public class GateTopClose extends CommandBase {
     public void initialize() {
         backGate.backGateExtend();
     }
+    
+    @Override
+    public boolean isFinished() {
+      return true;
+    }
 
     @Override
     public void end(boolean interrupted) {

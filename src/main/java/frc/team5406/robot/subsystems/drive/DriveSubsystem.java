@@ -17,16 +17,16 @@ import frc.team5406.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
 
-   /* private final Translation2d m_frontLeftLocation = new Translation2d(0.22, 0.22);
+    private final Translation2d m_frontLeftLocation = new Translation2d(0.22, 0.22);
     private final Translation2d m_frontRightLocation = new Translation2d(0.22, -0.22);
     private final Translation2d m_backLeftLocation = new Translation2d(-0.22, 0.22);
-    private final Translation2d m_backRightLocation = new Translation2d(-0.22, -0.22);*/
+    private final Translation2d m_backRightLocation = new Translation2d(-0.22, -0.22);
 
 
-    private final Translation2d m_frontLeftLocation = new Translation2d(-0.22, 0.22);
+    /*private final Translation2d m_frontLeftLocation = new Translation2d(-0.22, 0.22);
     private final Translation2d m_frontRightLocation = new Translation2d(0.22, 0.22);
     private final Translation2d m_backLeftLocation = new Translation2d(-0.22, -0.22);
-    private final Translation2d m_backRightLocation = new Translation2d(0.22, -0.22);
+    private final Translation2d m_backRightLocation = new Translation2d(0.22, -0.22);*/
 
     private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
             Constants.FRONT_LEFT_MODULE_STEER_MOTOR, Constants.FRONT_LEFT_MODULE_STEER_ENCODER);
@@ -132,9 +132,32 @@ public class DriveSubsystem extends SubsystemBase {
         m_backRight.setDesiredState(desiredStates[3]);
     }
 
+    public void setSwerveBrake(){
+        SwerveModuleState[] desiredStates = {
+            new SwerveModuleState(0, Rotation2d.fromDegrees(-45)), //frontLeft
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45)), //frontRight
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45)), //backLeft
+            new SwerveModuleState(0, Rotation2d.fromDegrees(-45)) //backRight
+        };
+       
+        setModuleStates(desiredStates);
+    }
+    
+
+    //FIXME: The startTime continually changes, resulting in elapsed time equalling 0 and angle always being set to start
     public Rotation2d desiredRotation(double start, double end, double startTime, double totalTime){
-        Rotation2d setPoint = Rotation2d.fromDegrees(start+(end-start)*((Timer.getFPGATimestamp()-startTime)/totalTime));
-        SmartDashboard.putNumber("desiredRot", setPoint.getDegrees());
+        double angle = start+(end-start)*((Timer.getFPGATimestamp()-startTime)/totalTime);
+        /*if (Math.signum(end-start)*angle > Math.signum(end-start)*end ){
+            angle = end;
+        }*/
+        Rotation2d setPoint = Rotation2d.fromDegrees(angle);
+        /*SmartDashboard.putNumber("desiredRot", setPoint.getDegrees());
+        SmartDashboard.putNumber("desiredRot-start", start);
+        SmartDashboard.putNumber("desiredRot-end", end);
+        SmartDashboard.putNumber("desiredRot-Time", Timer.getFPGATimestamp());
+        SmartDashboard.putNumber("desiredRot-startTime", startTime);
+        SmartDashboard.putNumber("desiredRot-totalTime", totalTime);
+        SmartDashboard.putNumber("desiredRot-angle", angle);*/
         return setPoint;
     }
     

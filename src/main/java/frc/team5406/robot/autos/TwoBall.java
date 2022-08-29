@@ -86,7 +86,7 @@ public class TwoBall {
 
                 ),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(0, 1.19, new Rotation2d(Units.degreesToRadians(90))),
+                new Pose2d(0, Units.inchesToMeters(40), new Rotation2d(Units.degreesToRadians(90))),
                 config);
 
         var thetaController = new ProfiledPIDController(
@@ -109,7 +109,8 @@ public class TwoBall {
                         ),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
-                                        exampleTrajectory,
+                                    
+                                exampleTrajectory,
                                         drive::getPose,
                                         drive.m_kinematics,
                                         // Position controllers
@@ -128,7 +129,7 @@ public class TwoBall {
                                 )
                         ),
                         new ParallelDeadlineGroup(
-                                new WaitCommand(1),  
+                                new WaitCommand(2),
                                 new Shoot(backGate)
                         )
 

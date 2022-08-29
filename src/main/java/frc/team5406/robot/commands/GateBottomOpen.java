@@ -21,6 +21,11 @@ public class GateBottomOpen extends CommandBase {
     }
 
     @Override
+    public boolean isFinished() {
+      return true;
+    }
+    
+    @Override
     public void end(boolean interrupted) {
     }
 }
