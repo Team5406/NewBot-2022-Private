@@ -177,8 +177,8 @@ public final class Constants {
     public static final int HOOD_MAX_LIMIT = 22;
     public static final int HOOD_MIN_LIMIT = 0;
 
-    public static final int CONVEYOR_INTAKE_SPEED_TOP = 2000;
-    public static final int CONVEYOR_INTAKE_SPEED_BOTTOM = 2000;
+    public static final int CONVEYOR_INTAKE_SPEED_TOP = 1500;
+    public static final int CONVEYOR_INTAKE_SPEED_BOTTOM = 1500;
     public static final int CONVEYOR_OUTTAKE_SPEED_TOP = -500;
     public static final int CONVEYOR_OUTTAKE_SPEED_BOTTOM = -500;
     public static final int SHOOTER_MAX_SPEED = 4000; //RPM

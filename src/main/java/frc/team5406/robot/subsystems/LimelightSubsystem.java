@@ -45,8 +45,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double calculateHoodAngle(double ty) {
-        double hoodAngle = 2e-05 * Math.pow(ty, 4) - 0.0002 * Math.pow(ty, 3) - 0.0144 * Math.pow(ty, 2) - 0.4064 * ty
-                + 14.482 -2;
+        double hoodAngle = 0.012 * Math.pow(ty, 2) - 0.086 * ty + 12.72;
 
         if (hoodAngle > Constants.HOOD_MAX_LIMIT) {
             hoodAngle = Constants.HOOD_MAX_LIMIT;
@@ -72,8 +71,7 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public static double calculateShooterSpeed(double ty) {
-        double shooterSpeed = 0.0025 * Math.pow(ty, 4) + 0.0073 * Math.pow(ty, 3) + 0.1006 * Math.pow(ty, 2)
-                - 16.377 * ty + 2054.2;
+        double shooterSpeed = 1.2843 * Math.pow(ty, 2) + 8.4046 * ty + 2336.2;
         if (shooterSpeed > Constants.SHOOTER_MAX_SPEED) {
             shooterSpeed = Constants.SHOOTER_MAX_SPEED;
         }
