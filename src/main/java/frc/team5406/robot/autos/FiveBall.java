@@ -181,7 +181,7 @@ public class FiveBall {
                         ),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1),  
-                                new Shoot(backGate)
+                                new Shoot(backGate, limelight)
                         ),
                         new ParallelDeadlineGroup(
                                 new SwerveControllerCommand(
@@ -204,7 +204,7 @@ public class FiveBall {
                         ),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1),  
-                                new Shoot(backGate)
+                                new Shoot(backGate, limelight)
                         ),
                         new GateTopClose(backGate),
                         new SwerveControllerCommand(
@@ -240,7 +240,7 @@ public class FiveBall {
                         ),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(1),  
-                                new Shoot(backGate)
+                                new Shoot(backGate, limelight)
                         )
                 ),
                 new FeedInCommand(feeder)

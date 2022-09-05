@@ -1,5 +1,6 @@
 package frc.team5406.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team5406.robot.Constants;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
@@ -21,6 +22,8 @@ public class SetShooter extends CommandBase {
         hood = _hood;
         limelight = _limelight;
         booster = _booster;
+        SmartDashboard.putNumber("hoodValue", 1);
+        SmartDashboard.putNumber("flywheelValue", 1000);
         addRequirements(flywheel, hood, booster);
     }
 
@@ -34,8 +37,14 @@ public class SetShooter extends CommandBase {
 
     @Override
     public void execute(){
-        flywheel.setShooterSpeed(limelight.getLLShooterSpeed());
-        hood.setHoodPosition(limelight.getLLHoodPosition());
+    //  double shooter = SmartDashboard.getNumber("flywheelValue", 1000);
+      //double hoodValue = SmartDashboard.getNumber("hoodValue", 1);
+    double shooterValue = limelight.getLLShooterSpeed();
+      double hoodValue =limelight.getLLHoodPosition();
+      SmartDashboard.putNumber("shooterValue", 1000);
+     // SmartDashboard.putNumber("hoodValue", 10+9);
+        flywheel.setShooterSpeed(shooterValue);
+        hood.setHoodPosition(hoodValue);
         booster.setBoosterSpeed(Constants.BOOSTER_SPEED);
 
     }

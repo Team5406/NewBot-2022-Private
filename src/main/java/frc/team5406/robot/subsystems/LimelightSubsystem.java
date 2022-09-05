@@ -14,6 +14,10 @@ public class LimelightSubsystem extends SubsystemBase {
     public double llts = 0;
     public double lldist = 0;
 
+    private static boolean shooting = false;
+    private static double shooterSpeed = 0;
+    private static double hoodAngle = 0;
+
     public void turnOffLimelight() {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
     }
@@ -44,8 +48,18 @@ public class LimelightSubsystem extends SubsystemBase {
 
     }
 
-    public double calculateHoodAngle(double ty) {
-        double hoodAngle = 0.012 * Math.pow(ty, 2) - 0.086 * ty + 12.72;
+    public void startShoot(){
+        shooting = true;
+    }
+
+    public void endShoot(){
+        shooting = false;
+    }
+
+    public static double calculateHoodAngle(double ty) {
+        if (!shooting){
+            hoodAngle =  0.0007 * Math.pow(ty, 3) +0.0153 * Math.pow(ty, 2) -0.5161 * ty + 9.1421;
+        }
 
         if (hoodAngle > Constants.HOOD_MAX_LIMIT) {
             hoodAngle = Constants.HOOD_MAX_LIMIT;
@@ -58,8 +72,10 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public double getLLShooterSpeed() {
 
-        if (llHasValidTarget) {
-            return calculateShooterSpeed(llty);
+        if(shooting){
+            return 1.005*shooterSpeed;
+        } else if (llHasValidTarget) {
+            return calculateShooterSpeed(llty) ;
         } else {
             return Constants.FLYWHEEL_SPEED_FENDER_HIGH; // Assume the LL can't find the target, shoot for fender.
         }
@@ -71,14 +87,16 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public static double calculateShooterSpeed(double ty) {
-        double shooterSpeed = 1.2843 * Math.pow(ty, 2) + 8.4046 * ty + 2336.2;
+        if(!shooting){
+            shooterSpeed = 1.6523 * Math.pow(ty, 2) + 15.557 * ty + 2366;
+        }
         if (shooterSpeed > Constants.SHOOTER_MAX_SPEED) {
             shooterSpeed = Constants.SHOOTER_MAX_SPEED;
         }
         if (shooterSpeed < 0) {
             shooterSpeed = 0;
         }
-        return 1.02*shooterSpeed;
+        return 1.005*shooterSpeed;
     }
 
     public boolean LLHasValidTarget() {
@@ -86,8 +104,9 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
     public double getLLHoodPosition() {
-
-        if (llHasValidTarget) {
+        if(shooting){
+            return hoodAngle;
+        }else if (llHasValidTarget) {
             return calculateHoodAngle(llty);
         } else {
             return Constants.HOOD_ANGLE_FENDER_HIGH;

@@ -158,7 +158,7 @@ public class RobotContainer {
 
     //Shoot
     driverBButton.whileActiveContinuous(
-        new Shoot(m_backGate)
+        new Shoot(m_backGate, m_limelight)
     );
 
     driverXButton.whileActiveContinuous(

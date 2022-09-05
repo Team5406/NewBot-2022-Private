@@ -109,7 +109,7 @@ public class OneBall {
                     new ParallelDeadlineGroup(
                         new WaitCommand(1), 
                         new FeedInCommand(feeder), 
-                        new Shoot(backGate)
+                        new Shoot(backGate, limelight)
                 ),
                 new SwerveControllerCommand(
                             exampleTrajectory,

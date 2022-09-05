@@ -130,7 +130,7 @@ public class TwoBall {
                         ),
                         new ParallelDeadlineGroup(
                                 new WaitCommand(2),
-                                new Shoot(backGate)
+                                new Shoot(backGate, limelight)
                         )
 
                 ), new FeedInCommand(feeder)

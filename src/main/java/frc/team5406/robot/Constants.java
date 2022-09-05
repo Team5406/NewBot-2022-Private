@@ -62,7 +62,7 @@ public final class Constants {
     public static final double MAXIMUM_VOLTAGE = 12.0;
 
     public static final double K_MAX_SPEED = 3.0; // 3 meters per second
-    public static final double K_MAX_ANGULAR_SPEED = Units.rotationsToRadians(0.5); // 1/2 rotation per second
+    public static final double K_MAX_ANGULAR_SPEED = Units.rotationsToRadians(1); // 1/2 rotation per second
 
     public static final double DRIVE_PID0_P = 0.08;//8E-02;
     public static final double DRIVE_PID0_I = 0;
@@ -183,8 +183,8 @@ public final class Constants {
     public static final int CONVEYOR_OUTTAKE_SPEED_BOTTOM = -500;
     public static final int SHOOTER_MAX_SPEED = 4000; //RPM
     
-    public static final int FLYWHEEL_SPEED_FENDER_HIGH = 2250;
-    public static final double HOOD_ANGLE_FENDER_HIGH = 1.5;
+    public static final int FLYWHEEL_SPEED_FENDER_HIGH = 2700;
+    public static final double HOOD_ANGLE_FENDER_HIGH = 7;
 
     public static final boolean GYRO_REVERSED = true;
 
@@ -239,7 +239,7 @@ public final class Constants {
     public static final double SHOOTER_PID0_D = 0;
     public static final double SHOOTER_PID0_F = 0.0000156;
 
-    public static final double BOOSTER_PID0_P = 2.0619E-06;
+    public static final double BOOSTER_PID0_P = 2.0619E-05;
     public static final double BOOSTER_PID0_D = 0;
     public static final double BOOSTER_PID0_I = 0;
     public static final double BOOSTER_PID0_F = 0.00156;
@@ -249,6 +249,6 @@ public final class Constants {
     public static final double HOOD_PID1_D = 0.1;
     public static final double HOOD_PID1_F = 3e-3;
 
-    public static final double BOOSTER_SPEED = 300;
+    public static final double BOOSTER_SPEED = 200;
     
 }
