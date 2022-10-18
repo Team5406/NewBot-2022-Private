@@ -92,11 +92,6 @@ public final class Constants {
     public static final double CONVEYOR_TOP_KV = 0.49344;
     public static final double CONVEYOR_TOP_KA = 0.024371;
 
-    public static final double CLIMBER_PID0_P = 2.2382E-09; //FIXME: New Values are needed, please characterize.
-    public static final double CLIMBER_PID0_I = 0; //FIXME: New Values are needed, please characterize.
-    public static final double CLIMBER_PID0_D = 0; //FIXME: New Values are needed, please characterize.
-    public static final double CLIMBER_PID0_F = 1.5e-5; //FIXME: New Values are needed, please characterize.
-
     public static final double ROTATION_PID0_MAX_ACCEL = 5700; // RPM
     public static final double ROTATION_PID0_MAX_VELOCITY = 3000;
 
@@ -156,7 +151,7 @@ public final class Constants {
     //public static final int CURRENT_LIMIT_INTAKE_ROLLERS = 60;
     public static final int CURRENT_LIMIT_CONVEYOR_BOTTOM = 20;
     public static final int CURRENT_LIMIT_CONVEYOR_TOP = 20;
-    public static final int CURRENT_LIMIT_CLIMBER = 20;
+    public static final int CURRENT_LIMIT_CLIMBER = 60;
 
     public static final int MIN_PRESSURE = 90;
     public static final int MAX_PRESSURE = 110;
@@ -255,6 +250,13 @@ public final class Constants {
     public static final double HOOD_PID1_D = 0.1;
     public static final double HOOD_PID1_F = 3e-3;
 
+    public static final double CLIMBER_PID0_P = 0.36653; //position
+    public static final double CLIMBER_PID0_I = 0;
+    public static final double CLIMBER_PID0_D = 0;
+    public static final double CLIMBER_PID0_F = 1.5e-5;
+
     public static final double BOOSTER_SPEED = 200;
+
+    public static final double CLIMBER_DISTANCE = 110; //rotations
     
 }

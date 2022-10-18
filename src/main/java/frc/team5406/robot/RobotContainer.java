@@ -23,6 +23,8 @@ import frc.team5406.robot.autos.RotateStraight;
 import frc.team5406.robot.autos.TwoBall;
 import frc.team5406.robot.commands.DefaultDriveCommand;
 import frc.team5406.robot.commands.AlignWithLimelight;
+import frc.team5406.robot.commands.ClimberExtend;
+import frc.team5406.robot.commands.ClimberRetract;
 import frc.team5406.robot.commands.DriveWithLimelight;
 import frc.team5406.robot.commands.FeedInCommand;
 import frc.team5406.robot.commands.FeedOutCommand;
@@ -35,6 +37,7 @@ import frc.team5406.robot.commands.IntakeCommand;
 import frc.team5406.robot.commands.SetShooter;
 import frc.team5406.robot.commands.Shoot;
 import frc.team5406.robot.subsystems.LimelightSubsystem;
+import frc.team5406.robot.subsystems.climber.ClimbSubsystem;
 import frc.team5406.robot.commands.IntakeDeployCommand;
 import frc.team5406.robot.commands.ManualSetShooter;
 import frc.team5406.robot.commands.OuttakeCommand;
@@ -49,6 +52,7 @@ import frc.team5406.robot.subsystems.intake.IntakeSubsystem;
 import frc.team5406.robot.subsystems.shooter.BoosterSubsystem;
 import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
 import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
+import frc.team5406.robot.triggers.DPadPressed;
 import frc.team5406.robot.triggers.JoystickMoved;
 import frc.team5406.robot.triggers.ResetHood;
 import frc.team5406.robot.triggers.TriggerPressed;
@@ -71,13 +75,16 @@ public class RobotContainer {
   FrontGateSubsystem m_frontGate = new FrontGateSubsystem();
   BackGateSubsystem m_backGate = new BackGateSubsystem();
   LimelightSubsystem m_limelight = new LimelightSubsystem();
+  ClimbSubsystem m_climber = new ClimbSubsystem();
 
   // The driver's controller
   XboxController driverGamepad = new XboxController(Constants.DRIVER_CONTROLLER);
+  XboxController operatorGamepad = new XboxController(Constants.OPERATOR_CONTROLLER);
 
   Trigger driverLeftTrigger = new TriggerPressed(driverGamepad::getLeftTriggerAxis);
   Trigger driverRightTrigger = new TriggerPressed(driverGamepad::getRightTriggerAxis);
   Trigger resetHoodTrigger = new ResetHood(m_hood);
+  Trigger operatorDPad = new DPadPressed(operatorGamepad::getPOV);
 
   JoystickButton driverRightModifier = new JoystickButton(driverGamepad, Button.kStart.value);
   JoystickButton driverLeftModifier = new JoystickButton(driverGamepad, Button.kBack.value);
@@ -85,8 +92,10 @@ public class RobotContainer {
   JoystickButton driverLeftJoystickButton = new JoystickButton(driverGamepad, Button.kLeftStick.value);
   JoystickButton driverXButton = new JoystickButton(driverGamepad, Button.kX.value);
   JoystickButton driverAButton = new JoystickButton(driverGamepad, Button.kA.value);
+  JoystickButton operatorAButton = new JoystickButton(operatorGamepad, Button.kA.value);
   JoystickButton driverBButton = new JoystickButton(driverGamepad, Button.kB.value);
   JoystickButton driverYButton = new JoystickButton(driverGamepad, Button.kY.value);
+  JoystickButton operatorYButton = new JoystickButton(operatorGamepad, Button.kY.value);
   JoystickButton driverLeftBumper = new JoystickButton(driverGamepad, Button.kLeftBumper.value);
   JoystickButton driverRightBumper = new JoystickButton(driverGamepad, Button.kRightBumper.value);
 
@@ -167,6 +176,14 @@ public class RobotContainer {
     
     driverYButton.whileActiveContinuous(
         new HighLob(m_flywheel, m_hood, m_booster)
+    );
+
+    operatorYButton.whileActiveContinuous (
+      new ClimberExtend(m_climber)
+    );
+
+    operatorAButton.whileActiveContinuous (
+      new ClimberRetract(m_climber)
     );
 
     driverRightTrigger.whileActiveContinuous(
