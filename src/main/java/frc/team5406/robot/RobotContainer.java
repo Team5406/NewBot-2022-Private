@@ -43,6 +43,7 @@ import frc.team5406.robot.commands.ManualSetShooter;
 import frc.team5406.robot.commands.OuttakeCommand;
 import frc.team5406.robot.commands.OuttakeLowerCommand;
 import frc.team5406.robot.commands.RejectLowLob;
+import frc.team5406.robot.commands.ResetClimbEncoder;
 import frc.team5406.robot.commands.ResetHoodEncoder;
 import frc.team5406.robot.subsystems.drive.DriveSubsystem;
 import frc.team5406.robot.subsystems.feeder.FeederSubsystem;
@@ -54,6 +55,7 @@ import frc.team5406.robot.subsystems.shooter.FlywheelSubsystem;
 import frc.team5406.robot.subsystems.shooter.HoodSubsystem;
 import frc.team5406.robot.triggers.DPadPressed;
 import frc.team5406.robot.triggers.JoystickMoved;
+import frc.team5406.robot.triggers.ResetClimber;
 import frc.team5406.robot.triggers.ResetHood;
 import frc.team5406.robot.triggers.TriggerPressed;
 
@@ -84,6 +86,7 @@ public class RobotContainer {
   Trigger driverLeftTrigger = new TriggerPressed(driverGamepad::getLeftTriggerAxis);
   Trigger driverRightTrigger = new TriggerPressed(driverGamepad::getRightTriggerAxis);
   Trigger resetHoodTrigger = new ResetHood(m_hood);
+  Trigger resetClimbTrigger = new ResetClimber(m_climber);
   Trigger operatorDPad = new DPadPressed(operatorGamepad::getPOV);
 
   JoystickButton driverRightModifier = new JoystickButton(driverGamepad, Button.kStart.value);
@@ -178,11 +181,11 @@ public class RobotContainer {
         new HighLob(m_flywheel, m_hood, m_booster)
     );
 
-    operatorYButton.whileActiveContinuous (
+    driverXButton.and(driverLeftModifier.and(driverLeftBumper)).whileActiveContinuous (
       new ClimberExtend(m_climber)
     );
 
-    operatorAButton.whileActiveContinuous (
+    driverBButton.and(driverLeftModifier.and(driverLeftBumper)).whileActiveContinuous (
       new ClimberRetract(m_climber)
     );
 
@@ -199,10 +202,15 @@ public class RobotContainer {
       new RunCommand(() -> m_swerve.setSwerveBrake(), m_swerve)
     );
 
-    driverLeftModifier.whenActive(m_swerve::zeroGyroscope);
+    driverLeftModifier.and(driverXButton.negate().and(driverBButton.negate()).and(driverLeftBumper).negate())
+    .whenActive(m_swerve::zeroGyroscope);
 
     resetHoodTrigger.whileActiveContinuous(
       new ResetHoodEncoder(m_hood)
+    );
+
+    resetClimbTrigger.whileActiveContinuous(
+      new ResetClimbEncoder(m_climber)
     );
   
   }

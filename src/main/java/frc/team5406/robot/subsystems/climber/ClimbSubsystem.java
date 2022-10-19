@@ -15,8 +15,11 @@ import frc.team5406.robot.Constants;
 public class ClimbSubsystem extends SubsystemBase {
     private CANSparkMax climber = new CANSparkMax(Constants.MOTOR_CLIMBER_ONE, MotorType.kBrushless);
 
+
     private RelativeEncoder climbEncoder;
     private SparkMaxPIDController climbPID;
+
+    public boolean climberReset = false;
 
     public void setupMotors(){
         climber.restoreFactoryDefaults();
@@ -54,11 +57,31 @@ public class ClimbSubsystem extends SubsystemBase {
   
     }
 
-    public void moveClimbUp(){
-    }
-
     public void stopClimber(){
         climber.set(0);
+    }
+
+    public void disableClimbLimits() {
+        climber.enableSoftLimit(SoftLimitDirection.kForward, false);
+        climber.enableSoftLimit(SoftLimitDirection.kReverse, false);
+    }
+
+    public void enableClimbLimits() {
+        climber.enableSoftLimit(SoftLimitDirection.kForward, true);
+        climber.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    }
+
+    public void resetClimb(){
+        climberReset = true;
+        climbEncoder.setPosition(0);
+    }
+
+    public double getClimbCurrent(){
+        return climber.getOutputCurrent();
+    }
+
+    public void setClimberSpeed(double value){
+        climber.set(value);
     }
 
     public ClimbSubsystem(){
@@ -67,7 +90,6 @@ public class ClimbSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Current", climber.getOutputCurrent());
         SmartDashboard.putNumber("Climb Encoder", climbEncoder.getPosition());
     }
 }

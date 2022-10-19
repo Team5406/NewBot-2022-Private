@@ -1,6 +1,7 @@
 package frc.team5406.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.team5406.robot.Constants;
 import frc.team5406.robot.subsystems.climber.ClimbSubsystem;
 
 public class ClimberExtend extends CommandBase {
@@ -13,7 +14,7 @@ public class ClimberExtend extends CommandBase {
 
     @Override
     public void execute() {
-        climber.setClimber(105);
+        climber.setClimber(Constants.CLIMBER_POSITION_UP);
     }
 
     @Override
@@ -22,9 +23,7 @@ public class ClimberExtend extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("Climb - End");
-        climber.stopClimber();
-    
+        System.out.println("Climb - End");    
     }
 
 }

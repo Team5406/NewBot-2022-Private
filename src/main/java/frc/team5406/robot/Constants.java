@@ -257,6 +257,8 @@ public final class Constants {
 
     public static final double BOOSTER_SPEED = 200;
 
+    public static final double CLIMBER_POSITION_UP = 105; //Rotations on NEO
+    public static final double CLIMBER_POSITION_DOWN = 5; //Rotations on NEO
+
     public static final double CLIMBER_DISTANCE = 110; //rotations
-    
 }
